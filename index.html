@@ -983,6 +983,29 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 56px;
     align-self: flex-start;
+    overflow: hidden;
+    position: relative;
+  }
+  .ans-card-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .ans-card-thumb .thumb-fallback {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+    padding: 12px;
+    text-align: center;
+    color: #fff;
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+  .ans-card-thumb .thumb-fallback .sub {
+    font-size: 11px;
+    margin-top: 4px;
+    opacity: 0.85;
+    font-weight: 600;
   }
   .ans-card-info { flex: 1; min-width: 0; }
 
@@ -2311,7 +2334,7 @@
   /* ═══════════════════════════════════════════
      의약품 상세 페이지 (Figma 8791:13536)
      ═══════════════════════════════════════════ */
-  #medDetailView { background: #F4F6F8; min-height: 100vh; }
+  #medDetailView { background: #fff; min-height: 100vh; }
   .md-shell {
     max-width: 1280px; margin: 0 auto;
     padding: 16px 24px 60px;
@@ -2322,14 +2345,14 @@
     margin: 8px 0 6px;
     border-radius: 999px;
     background: #fff;
-    border: 1px solid var(--border);
-    font-size: 13px; font-weight: 700; color: var(--text);
+    border: 1px solid var(--primary-lighter);
+    font-size: 13.5px; font-weight: 800; color: var(--primary);
     cursor: pointer;
     transition: all .15s ease;
   }
   .md-back:hover {
     background: var(--primary-soft);
-    border-color: var(--primary-lighter);
+    border-color: var(--primary);
     color: var(--primary-strong);
   }
   .md-crumb {
@@ -2347,6 +2370,471 @@
     align-items: start;
   }
   @media (max-width: 1100px) { .md-top { grid-template-columns: 1fr; } }
+
+  /* ─── Faithful Figma rebuild ─── */
+  .md-main-section {
+    background: transparent;
+    padding: 0;
+  }
+  .md-head2 {
+    display: grid; grid-template-columns: 1fr 220px;
+    gap: 24px;
+    padding: 8px 0 4px;
+  }
+  .md-head2-info { min-width: 0; }
+  .md-head2 .md-maker {
+    font-size: 13px; color: var(--text-sub); font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .md-head2 .md-name {
+    font-size: 26px; font-weight: 800; color: var(--text);
+    letter-spacing: -0.8px; line-height: 1.2;
+    margin: 0 0 8px;
+  }
+  .md-dose {
+    font-size: 12.5px; color: var(--text-sub);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .md-dose-tag {
+    background: var(--primary-soft); color: var(--primary-strong);
+    font-size: 10.5px; font-weight: 800;
+    padding: 2px 7px; border-radius: 4px;
+  }
+  .md-price-row {
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap;
+  }
+  .md-price-row .md-discount {
+    font-size: 18px; font-weight: 900; color: #FF4D4F;
+  }
+  .md-price-row .md-price-num {
+    font-size: 24px; font-weight: 900; color: var(--text);
+    letter-spacing: -0.5px;
+  }
+  .md-price-row .md-price-orig {
+    font-size: 13px; color: var(--text-mute); text-decoration: line-through;
+  }
+  .md-order-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px 8px 6px;
+    border-radius: 999px;
+    background: var(--primary); color: #fff;
+    font-size: 13.5px; font-weight: 800;
+    border: none; cursor: pointer;
+    margin-left: 6px;
+  }
+  .md-order-btn .b-mark {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 12px;
+  }
+  .md-thumb2 {
+    width: 180px; height: 180px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #FAFBFC, #F0F2F5);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    align-self: flex-start;
+    cursor: zoom-in;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .md-thumb2:hover { transform: scale(1.02); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+  /* Image zoom modal */
+  .img-modal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 40px;
+    cursor: zoom-out;
+  }
+  .img-modal.open { display: flex; animation: fadeIn .15s ease; }
+  .img-modal-content {
+    max-width: 80vw; max-height: 80vh;
+    background: #fff;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 200px;
+    width: min(80vw, 600px);
+    aspect-ratio: 1/1;
+    cursor: default;
+  }
+  .img-modal-close {
+    position: absolute; top: 24px; right: 24px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: #fff; border: none;
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .img-modal-close:hover { background: rgba(255,255,255,0.25); }
+
+  .md-section {
+    padding: 16px 0 8px;
+  }
+  .md-section + .md-section {
+    border-top: 1px solid #F4F5F7;
+    padding-top: 24px;
+    margin-top: 8px;
+  }
+  .md-section-label {
+    font-size: 13px; font-weight: 800; color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: -0.2px;
+  }
+  .md-section-label-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .md-section-label-row .md-section-label { margin-bottom: 0; }
+  .md-section-source {
+    font-size: 11.5px; color: var(--text-mute);
+  }
+  .md-section-source span { color: var(--text-sub); margin: 0 4px; }
+  .md-chips {
+    display: flex; gap: 8px;
+  }
+  .md-chip {
+    background: #fff; border: 1px solid var(--border);
+    color: var(--text); font-size: 13px; font-weight: 700;
+    padding: 9px 16px; border-radius: 8px;
+    cursor: pointer;
+  }
+  .md-chip.active {
+    background: var(--primary-soft);
+    border-color: var(--primary);
+    color: var(--primary-strong);
+  }
+  .md-intake {
+    display: flex; flex-wrap: wrap; gap: 18px;
+    align-items: center;
+  }
+  .intake-item {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.5px; color: var(--text);
+  }
+  .md-pricetable {
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 13px; color: var(--text);
+  }
+  .md-priceline {
+    display: flex; align-items: center;
+  }
+  .md-priceline .lbl { color: var(--text-sub); flex-shrink: 0; }
+  .md-priceline .lbl-badge {
+    background: #FFF1F0; color: #FF4D4F;
+    font-size: 10.5px; font-weight: 800;
+    padding: 2px 6px; border-radius: 3px;
+    margin-left: 4px;
+  }
+  .md-priceline .leader {
+    flex: 1;
+    border-bottom: 1px dotted #D9D9D9;
+    margin: 0 8px;
+    height: 1px;
+    transform: translateY(-3px);
+  }
+  .md-priceline .val { font-weight: 800; color: var(--text); flex-shrink: 0; }
+  .md-priceline .val.red { color: #FF4D4F; }
+
+  .md-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
+  }
+
+  /* Selling review chart (faithful) */
+  .md-rc {
+    background: transparent;
+    padding: 4px 0 0;
+  }
+  .md-rc-head2 {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .md-rc-title { font-size: 14px; font-weight: 800; color: #FF8A3D; }
+  .md-rc-sub { font-size: 13px; color: var(--text); }
+  .md-rc-bars2 { display: flex; flex-direction: column; gap: 8px; }
+  .md-rc-row {
+    display: grid; grid-template-columns: 22px 140px 1fr 40px;
+    align-items: center; gap: 10px;
+  }
+  .md-rc-row.faded { opacity: 0.5; }
+  .md-rc-emoji { font-size: 16px; }
+  .md-rc-keyword { font-size: 13px; color: var(--text); font-weight: 600; }
+  .md-rc-track2 {
+    height: 26px; border-radius: 6px;
+    background: #F4F6FB;
+    overflow: hidden;
+  }
+  .md-rc-fill2 {
+    height: 100%;
+    background: #DCE5FF;
+    border-radius: 6px;
+  }
+  /* 3-stage gradient: soft pastel blue-purple */
+  .md-rc-row:nth-child(1) .md-rc-fill2 { background: #B8C4F0; }
+  .md-rc-row:nth-child(2) .md-rc-fill2 { background: #CCD4F4; }
+  .md-rc-row:nth-child(3) .md-rc-fill2 { background: #DEE3F7; }
+  .md-rc-row:nth-child(n+4) .md-rc-fill2 { background: #ECEFFA; }
+  .md-rc-pct2 { font-size: 12.5px; font-weight: 800; color: var(--primary); text-align: right; }
+  .md-rc-expand {
+    display: block;
+    margin: 14px auto 18px;
+    padding: 6px 14px;
+    background: transparent; border: none;
+    font-size: 12.5px; color: var(--text-sub); font-weight: 700;
+    cursor: pointer;
+  }
+  .md-rc-quotes {
+    display: grid; grid-template-columns: 1fr 1fr 100px;
+    gap: 10px;
+  }
+  .md-rc-quote {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color .15s ease;
+  }
+  .md-rc-quote:hover { border-color: var(--primary-lighter); }
+  .md-rc-hidden { display: none; }
+  .md-rc-bars2.expanded .md-rc-hidden { display: grid; }
+
+  /* Review modal */
+  .rv-modal {
+    position: fixed; inset: 0;
+    background: rgba(17,24,39,0.5);
+    z-index: 100;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .rv-modal.open { display: flex; animation: fadeIn .15s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .rv-modal-content {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%; max-width: 520px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 24px;
+    position: relative;
+    animation: slideUp .2s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .rv-modal-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: var(--text-sub);
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .rv-modal-close:hover { background: var(--bg-soft); color: var(--text); }
+  .rv-modal-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+    padding-right: 36px;
+  }
+  .rv-modal-user {
+    font-size: 15px; font-weight: 800; color: var(--text);
+  }
+  .rv-modal-date {
+    font-size: 12px; color: var(--text-mute);
+  }
+  .rv-modal-rating {
+    margin-left: auto;
+    font-size: 13px; font-weight: 800; color: #FF8A3D;
+  }
+  .rv-modal-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 16px;
+  }
+  .rv-modal-tags .qtag {
+    background: #F4F5F7;
+    color: var(--text-sub);
+    font-size: 12px; font-weight: 700;
+    padding: 4px 10px; border-radius: 999px;
+  }
+  .rv-modal-body {
+    font-size: 14px; color: var(--text);
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+  .rv-modal-foot {
+    display: flex; gap: 8px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #F4F5F7;
+    font-size: 12px; color: var(--text-mute);
+  }
+  .rv-modal-foot button {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--bg-soft);
+    border: 1px solid transparent;
+    font-size: 12px; font-weight: 700; color: var(--text-sub);
+    cursor: pointer;
+  }
+  .rv-modal-foot button:hover { background: var(--primary-soft); color: var(--primary-strong); }
+  .rv-counter {
+    margin-left: auto;
+    font-size: 12px; color: var(--text-mute); font-weight: 700;
+    font-feature-settings: 'tnum';
+  }
+  .rv-nav-arrow {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--text-sub);
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    z-index: 101;
+    transition: all .15s ease;
+  }
+  .rv-nav-arrow:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .rv-nav-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+  .rv-nav-arrow:disabled:hover { background: #fff; color: var(--text-sub); border-color: var(--border); }
+  .rv-nav-arrow.prev { left: max(24px, calc(50vw - 320px)); }
+  .rv-nav-arrow.next { right: max(24px, calc(50vw - 320px)); }
+  @media (max-width: 640px) {
+    .rv-nav-arrow.prev { left: 8px; }
+    .rv-nav-arrow.next { right: 8px; }
+  }
+  .md-rc-quote-tags {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    margin-bottom: 8px;
+  }
+  .qtag {
+    background: #F4F5F7;
+    color: var(--text-sub);
+    font-size: 10.5px; font-weight: 700;
+    padding: 3px 8px; border-radius: 4px;
+  }
+  .qtag.plus { color: var(--text-mute); padding: 3px 6px; }
+  .md-rc-quote-text {
+    margin: 0 0 8px;
+    font-size: 12.5px; color: var(--text); line-height: 1.55;
+    overflow: hidden; text-overflow: ellipsis;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  }
+  .md-rc-quote-user {
+    font-size: 11px; color: var(--text-mute);
+  }
+  .md-rc-quote-user .dt { margin-left: 4px; }
+  .md-rc-more {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 12px; color: var(--text-sub); font-weight: 700;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer;
+    gap: 4px;
+  }
+  .md-rc-more svg { color: var(--text-mute); }
+
+  /* Sidebar ranking + AD (faithful) */
+  .md-rank-card { padding: 18px 18px 8px; }
+  .md-rank-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+  .md-rank-list { display: flex; flex-direction: column; }
+  .md-rank-row2 {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #F4F5F7;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .md-rank-row2:last-child { border-bottom: none; }
+  .md-rank-row2:hover .nm2 { color: var(--primary-strong); }
+  .md-rank-row2 .rk2 { width: 22px; font-weight: 800; color: #FF4D4F; text-align: center; flex-shrink: 0; font-feature-settings: 'tnum'; }
+  .md-rank-row2 .nm2 { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+  .md-rank-row2 .tr { font-size: 11.5px; font-weight: 800; flex-shrink: 0; }
+  .md-rank-row2 .tr.up { color: #FF4D4F; }
+  .md-rank-row2 .tr.down { color: var(--primary); }
+  .md-rank-row2 .tr.new { color: #FF4D4F; font-size: 10.5px; background: #FFF1F0; padding: 2px 5px; border-radius: 3px; }
+
+  .md-ad-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    position: relative;
+  }
+  .md-ad-card .md-ad-tag {
+    position: absolute; top: 10px; right: 10px;
+    font-size: 10px; color: var(--text-mute);
+    border: 1px solid var(--border);
+    padding: 2px 5px; border-radius: 3px;
+  }
+  .md-ad-img { margin-bottom: 12px; }
+  .md-ad-line1 { font-size: 12.5px; color: var(--text-sub); }
+  .md-ad-line2 { font-size: 14.5px; font-weight: 800; color: var(--text); margin-top: 2px; letter-spacing: -0.3px; }
+  .md-ad-foot {
+    margin-top: 10px;
+    font-size: 12px; font-weight: 700; color: #FF8A3D;
+  }
+
+  /* Recommend products (faithful) */
+  .md-recommend-list {
+    display: grid; grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 1100px) { .md-recommend-list { grid-template-columns: repeat(4, 1fr); } }
+  .md-rec-item {
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+  .md-rec-item .md-rec-thumb {
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #FAFBFC, #EAEDF2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
+  .md-rec-name {
+    font-size: 12.5px; color: var(--text); font-weight: 700;
+    line-height: 1.35;
+    overflow: hidden; text-overflow: ellipsis;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    margin-bottom: 2px;
+  }
+  .md-rec-spec {
+    font-size: 11px; color: var(--text-mute);
+    margin-bottom: 4px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .md-rec-price-row {
+    display: flex; align-items: baseline; gap: 4px;
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .md-rec-discount { color: #FF4D4F; font-weight: 800; }
+  .md-rec-price { font-weight: 800; color: var(--text); }
+  .md-rec-orig { color: var(--text-mute); text-decoration: line-through; font-size: 11px; }
+  .md-rec-tag {
+    display: inline-block;
+    background: var(--primary-soft); color: var(--primary-strong);
+    font-size: 10.5px; font-weight: 800;
+    padding: 1px 6px; border-radius: 3px;
+    margin-top: 4px;
+  }
 
   /* LEFT main column */
   .md-card {
@@ -3364,116 +3852,185 @@
 
     <div class="md-top">
       <!-- LEFT main -->
-      <section class="md-card">
-        <div class="md-head">
-          <div class="md-head-info">
-            <div class="md-maker" id="mdMaker">한국얀센</div>
+      <section class="md-main-section">
+        <div class="md-head2">
+          <div class="md-head2-info">
+            <div class="md-maker" id="mdMaker">Kenvue</div>
             <h1 class="md-name" id="mdName">타이레놀정 500밀리그람</h1>
-            <div class="md-dose" id="mdDose">500mg 10정 (FTP)</div>
-            <div class="md-price">
+            <div class="md-dose">
+              <span id="mdDose">500mg 10 정 (PTP)</span>
+              <span class="md-dose-tag">유통</span>
+            </div>
+            <div class="md-price-row">
               <span class="md-discount">12%</span>
               <span class="md-price-num" id="mdPrice">3,200원</span>
-            </div>
-            <div class="md-actions">
-              <button class="md-btn-save">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                보관함
+              <span class="md-price-orig">0원</span>
+              <button class="md-order-btn">
+                <span class="b-mark">B</span>
+                주문하기
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </button>
             </div>
+
+            <!-- 종류 -->
+            <div class="md-section">
+              <div class="md-section-label">종류</div>
+              <div class="md-chips">
+                <button class="md-chip active" onclick="mdSelectChip(this)">500mg 10정(PTP)</button>
+                <button class="md-chip" onclick="mdSelectChip(this)">500mg 30정 (병)</button>
+              </div>
+            </div>
+
+            <!-- 섭취정보 -->
+            <div class="md-section">
+              <div class="md-section-label">섭취정보</div>
+              <div class="md-intake">
+                <div class="intake-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-mute);"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  7일분
+                </div>
+                <div class="intake-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-mute);"><path d="M10.5 20.5L20 11a4 4 0 0 0-5.5-5.5L4 16a4 4 0 0 0 6.5 4.5z"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/></svg>
+                  캡슐, 정
+                </div>
+                <div class="intake-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-mute);"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                  1일 최대 8정 이내 복용
+                </div>
+                <div class="intake-item">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-mute);"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                  발열, 두통, 신경통, 치통, 관절통
+                </div>
+              </div>
+            </div>
+
+            <!-- 판매가 정보 -->
+            <div class="md-section">
+              <div class="md-section-label-row">
+                <div class="md-section-label">판매가 정보</div>
+                <div class="md-section-source">
+                  제공처: <span>올댓페이</span>
+                  <a href="https://www.allthatpay.kr" target="_blank" style="color:var(--primary);">https://www.allthatpay.kr ↗</a>
+                </div>
+              </div>
+              <div class="md-pricetable">
+                <div class="md-priceline">
+                  <span class="lbl">최저~최대가</span>
+                  <span class="leader"></span>
+                  <span class="val">2,300원~5,000원</span>
+                </div>
+                <div class="md-priceline">
+                  <span class="lbl">평균 판매가</span>
+                  <span class="leader"></span>
+                  <span class="val">3,176원</span>
+                </div>
+                <div class="md-priceline">
+                  <span class="lbl">소비자가 <span class="lbl-badge">최다</span></span>
+                  <span class="leader"></span>
+                  <span class="val red">3,000원</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="md-thumb" id="mdThumb">💊</div>
+          <div class="md-thumb2" onclick="openImgModal()"><span style="font-size:64px;">💊</span></div>
         </div>
 
-        <div class="md-row">
-          <div class="md-row-label">종류</div>
-          <div class="md-row-value">
-            <span class="chip-inline">500mg 10정(FTP)</span>
-            <span class="chip-inline gray">500mg 30정 (병)</span>
-          </div>
-        </div>
-        <div class="md-row">
-          <div class="md-row-label">심평 정보</div>
-          <div class="md-row-value" style="display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;">
-            <span>🏷 비고</span>
-            <span>💊 임부</span>
-            <span>📋 1정 약가 표준 약가</span>
-            <span>🔬 보험 부작용 식품, 음식, 식물 등, 안경류</span>
-          </div>
-        </div>
-        <div class="md-row">
-          <div class="md-row-label">판매가 정보</div>
-          <div class="md-row-value" style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;">
-            <div style="display:flex;justify-content:space-between;max-width:520px;">
-              <span style="color:var(--text-sub);">📦 1정 가격</span>
-              <span style="font-weight:800;">3,200원 ~ 5,000원</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;max-width:520px;">
-              <span style="color:var(--text-sub);">💰 1정 가격</span>
-              <span style="font-weight:800;">3,170원</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;max-width:520px;">
-              <span style="color:var(--text-sub);">🏪 카드 가격 <span style="background:#FFF1F0;color:#FF4D4F;padding:1px 6px;border-radius:3px;font-size:10.5px;font-weight:800;margin-left:4px;">마트</span></span>
-              <span style="font-weight:800;">3,000원</span>
-            </div>
-          </div>
-        </div>
+        <div class="md-divider"></div>
 
         <!-- Selling review chart -->
-        <div class="md-review-chart">
-          <div class="md-rc-head">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L9.5 8.5L2 11l7.5 2.5L12 21l2.5-7.5L22 11l-7.5-2.5L12 2z"/></svg>
-            셀링리뷰
-            <span class="badge-count">38명</span>
-            <span style="font-weight:500;color:var(--text-sub);">의 약사님이 이렇게 평가했어요!</span>
+        <div class="md-rc">
+          <div class="md-rc-head2">
+            <span class="md-rc-title">⭐ 셀링리뷰</span>
+            <span class="md-rc-sub"><span style="color:var(--primary);font-weight:800;">32명</span>의 약사님들이 이런점을 좋아하셨어요!</span>
           </div>
-          <div class="md-rc-bars">
-            <div class="md-rc-bar">
-              <div class="md-rc-icon orange">🛡</div>
-              <div class="md-rc-label">안전 효과 좋은</div>
-              <div class="md-rc-track"><div class="md-rc-fill" style="width:65%"></div></div>
-              <div class="md-rc-pct">65%</div>
+          <div class="md-rc-bars2" id="mdRcBars">
+            <div class="md-rc-row">
+              <span class="md-rc-emoji">💊</span>
+              <span class="md-rc-keyword">진통 효과 빠름</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:63%"></div></div>
+              <span class="md-rc-pct2">63%</span>
             </div>
-            <div class="md-rc-bar">
-              <div class="md-rc-icon blue">💊</div>
-              <div class="md-rc-label">복용 부담 적은</div>
-              <div class="md-rc-track"><div class="md-rc-fill" style="width:28%"></div></div>
-              <div class="md-rc-pct">28%</div>
+            <div class="md-rc-row">
+              <span class="md-rc-emoji">🫃</span>
+              <span class="md-rc-keyword">위 부담 적음</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:38%"></div></div>
+              <span class="md-rc-pct2">38%</span>
             </div>
-            <div class="md-rc-bar">
-              <div class="md-rc-icon green">⚡</div>
-              <div class="md-rc-label">효능 가격 효율</div>
-              <div class="md-rc-track"><div class="md-rc-fill" style="width:21%"></div></div>
-              <div class="md-rc-pct">21%</div>
+            <div class="md-rc-row">
+              <span class="md-rc-emoji">😪</span>
+              <span class="md-rc-keyword">졸림 거의 없음</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:27%"></div></div>
+              <span class="md-rc-pct2">27%</span>
+            </div>
+            <div class="md-rc-row faded">
+              <span class="md-rc-emoji">💧</span>
+              <span class="md-rc-keyword">구취 환자 부담 용이</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:18%"></div></div>
+              <span class="md-rc-pct2">18%</span>
+            </div>
+            <div class="md-rc-row md-rc-hidden">
+              <span class="md-rc-emoji">⚡</span>
+              <span class="md-rc-keyword">빠른 흡수</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:15%"></div></div>
+              <span class="md-rc-pct2">15%</span>
+            </div>
+            <div class="md-rc-row md-rc-hidden">
+              <span class="md-rc-emoji">🌡</span>
+              <span class="md-rc-keyword">발열 신속 완화</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:13%"></div></div>
+              <span class="md-rc-pct2">13%</span>
+            </div>
+            <div class="md-rc-row md-rc-hidden">
+              <span class="md-rc-emoji">🧊</span>
+              <span class="md-rc-keyword">두통 진정 우수</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:11%"></div></div>
+              <span class="md-rc-pct2">11%</span>
+            </div>
+            <div class="md-rc-row md-rc-hidden">
+              <span class="md-rc-emoji">👍</span>
+              <span class="md-rc-keyword">가성비 우수</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:9%"></div></div>
+              <span class="md-rc-pct2">9%</span>
+            </div>
+            <div class="md-rc-row md-rc-hidden">
+              <span class="md-rc-emoji">🤝</span>
+              <span class="md-rc-keyword">상호작용 적음</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:7%"></div></div>
+              <span class="md-rc-pct2">7%</span>
+            </div>
+            <div class="md-rc-row md-rc-hidden">
+              <span class="md-rc-emoji">😌</span>
+              <span class="md-rc-keyword">환자 만족도 높음</span>
+              <div class="md-rc-track2"><div class="md-rc-fill2" style="width:6%"></div></div>
+              <span class="md-rc-pct2">6%</span>
             </div>
           </div>
+          <button class="md-rc-expand" id="mdRcExpandBtn" onclick="toggleRcExpand(this)">펼쳐보기 ▼</button>
 
-          <div class="md-rc-tabs">
-            <button class="md-rc-tab active">셀링리뷰</button>
-            <button class="md-rc-tab">전문 의약품</button>
-            <button class="md-rc-tab">사외 약품</button>
-            <button class="md-rc-tab">조선시대</button>
-            <button class="md-rc-tab">서울지점 직거래</button>
-            <button class="md-rc-tab" style="margin-left:auto;">크게보기</button>
-          </div>
-
-          <div class="md-rc-excerpts">
-            <div class="md-rc-excerpt">
-              <div class="md-rc-excerpt-tags">
-                <span class="md-rc-mini orange">🛡 안전 효과 좋은</span>
-                <span class="md-rc-mini blue">💊 복용 편한</span>
-                <span class="md-rc-mini green">⚡ 효능 가격 좋은</span>
+          <div class="md-rc-quotes">
+            <div class="md-rc-quote" onclick="openReviewModal('강****국', '2025.05.15', 4.8, ['💊 진정 효과 빠름','🫃 부착력 좋음','😅 자극 적음','💧 효능 가격 좋은'], '알약이 작아서 섭취가 용이하고 변비와 설사에 모두 작용하여 유산균처럼 매일 먹기 좋고, 소화제와도 유사한 효과가 있어요. 환자에게 권할 때 부담스럽지 않은 가격이고 약국에서도 재고 회전이 빠른 편이라 추천합니다.')">
+              <div class="md-rc-quote-tags">
+                <span class="qtag">💊 진정 효과 빠름</span>
+                <span class="qtag">🫃 부착력 좋음</span>
+                <span class="qtag">😅 자극 적음</span>
+                <span class="qtag plus">+1</span>
               </div>
-              알아본 적이 많지가 적어서 알아도 다양하다는데, 서비스로 하나에 두가지 약 구매하셨다, 가격도 그렇게 부담스럽지 않은 같아요. 예사임을 이마트 직<span style="color:var(--text-mute);"> ...더보기</span>
-              <div class="md-rc-excerpt-name">★4.8 · 2026-01-15</div>
+              <p class="md-rc-quote-text">알약이 작아서 섭취가 용이하고 변비와 설사에 모두 작용하여 유산균처럼 매일 먹기 좋고, 소화제와도 유사한 효과가 있어요</p>
+              <div class="md-rc-quote-user">강****국 <span class="dt">2025.05.15</span></div>
             </div>
-            <div class="md-rc-excerpt">
-              <div class="md-rc-excerpt-tags">
-                <span class="md-rc-mini orange">🛡 안전 효과 좋은</span>
-                <span class="md-rc-mini blue">💊 복용 편한</span>
-                <span class="md-rc-mini green">⚡ 효능 가격 좋은</span>
+            <div class="md-rc-quote" onclick="openReviewModal('스리***국', '2025.05.15', 4.7, ['💊 진정 효과 빠름','🫃 부착력 좋음','😅 자극 적음','💧 효능 가격 좋은'], '알약이 작아서 섭취가 용이하고 변비와 설사에 모두 작용하여 유산균처럼 매일 먹기 좋고, 소화제와도 유사한 효과가 있어요. 처방받지 않아도 안심하고 권할 수 있어서 약국 운영에 도움이 많이 됩니다.')">
+              <div class="md-rc-quote-tags">
+                <span class="qtag">💊 진정 효과 빠름</span>
+                <span class="qtag">🫃 부착력 좋음</span>
+                <span class="qtag">😅 자극 적음</span>
+                <span class="qtag plus">+1</span>
               </div>
-              알아본 적이 많지가 적어서 알아도 다양하다는데, 서비스로 하나에 두가지 약 구매하셨다, 가격도 그렇게 부담스럽지 않은 같아요. 예사임을 이마트 직<span style="color:var(--text-mute);"> ...더보기</span>
-              <div class="md-rc-excerpt-name">★4.7 · 2026-01-14</div>
+              <p class="md-rc-quote-text">알약이 작아서 섭취가 용이하고 변비와 설사에 모두 작용하여 유산균처럼 매일 먹기 좋고, 소화제와도 유사한 효과가 있어요</p>
+              <div class="md-rc-quote-user">스리***국 <span class="dt">2025.05.15</span></div>
+            </div>
+            <div class="md-rc-more">
+              더보기
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </div>
         </div>
@@ -3481,23 +4038,32 @@
 
       <!-- RIGHT sidebar -->
       <aside class="md-side">
-        <div class="md-side-card">
-          <div class="md-side-title">동일성분 의약품 순위</div>
-          <div class="md-rank-row top3"><span class="rk">1</span><span class="nm">타이레놀정 500mg</span><span class="trend">↑1</span></div>
-          <div class="md-rank-row top3"><span class="rk">2</span><span class="nm">펜시 시럽 5mL</span><span class="trend">↑2</span></div>
-          <div class="md-rank-row top3"><span class="rk">3</span><span class="nm">콜대원 키즈펜시럽 5mL</span><span class="trend down">↓1</span></div>
-          <div class="md-rank-row"><span class="rk">4</span><span class="nm">아세트아미노펜 100mg</span><span class="trend">↑3</span></div>
-          <div class="md-rank-row"><span class="rk">5</span><span class="nm">아세트아미노펜 160mg/3 7g</span><span class="trend down">↓1</span></div>
-          <div class="md-rank-row"><span class="rk">6</span><span class="nm">서스펜 좌약 500mg</span><span class="trend flat">−</span></div>
-          <div class="md-rank-row"><span class="rk">7</span><span class="nm">미세놀 500mg</span><span class="trend">↑2</span></div>
-          <div class="md-rank-row"><span class="rk">8</span><span class="nm">트라마돌염산염캡슐 500mg 갈색시럽…</span><span class="trend down">↓2</span></div>
-          <div class="md-rank-row"><span class="rk">9</span><span class="nm">아세트아미노펜정 500mg</span><span class="trend">↑1</span></div>
-          <div class="md-rank-row"><span class="rk">10</span><span class="nm">트라마돌염산염캡슐 500mg</span><span class="trend flat">−</span></div>
+        <div class="md-side-card md-rank-card">
+          <div class="md-rank-title">동일성분 의약품 순위</div>
+          <div class="md-rank-list">
+            <div class="md-rank-row2"><span class="rk2">1</span><span class="nm2">타이레놀정 500mg</span><span class="tr up">▲</span></div>
+            <div class="md-rank-row2"><span class="rk2">2</span><span class="nm2">챔프시럽 5ml</span><span class="tr down">▼</span></div>
+            <div class="md-rank-row2"><span class="rk2">3</span><span class="nm2">콜대원 키즈펜시럽 5ml</span><span class="tr new">NEW</span></div>
+            <div class="md-rank-row2"><span class="rk2">4</span><span class="nm2">어린이타이레놀현타액 100ml</span><span class="tr up">▲</span></div>
+            <div class="md-rank-row2"><span class="rk2">5</span><span class="nm2">어린이타이레놀산 160mg랄 7입</span><span class="tr new">NEW</span></div>
+            <div class="md-rank-row2"><span class="rk2">6</span><span class="nm2">유한아세트아미노펜정 500mg</span><span class="tr up">▲</span></div>
+            <div class="md-rank-row2"><span class="rk2">7</span><span class="nm2">타세놀정 500mg</span><span class="tr new">NEW</span></div>
+            <div class="md-rank-row2"><span class="rk2">8</span><span class="nm2">유한아세트아미노펜정 500mg 길어지면…</span><span class="tr up">▲</span></div>
+            <div class="md-rank-row2"><span class="rk2">9</span><span class="nm2">탁센아세트아미노펜정 500mg</span><span class="tr down">▼</span></div>
+            <div class="md-rank-row2"><span class="rk2">10</span><span class="nm2">파인큐아세트펜시럽 20ml</span><span class="tr down">▼</span></div>
+          </div>
         </div>
 
-        <div class="md-side-ad">
-          <div class="md-side-ad-label">📅 매일 식사 전 1정 보장</div>
-          <div class="md-side-ad-title">대장균 차단력 도움</div>
+        <div class="md-ad-card">
+          <span class="md-ad-tag">AD</span>
+          <div class="md-ad-img">
+            <div style="width:100%;height:120px;background:linear-gradient(135deg,#A4D5FF,#7FB8FF);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:48px;">🦷</div>
+          </div>
+          <div class="md-ad-text">
+            <div class="md-ad-line1">칫솔 치실이 닿지 않는 곳까지!</div>
+            <div class="md-ad-line2">리스테린 토탈케어 캐비디케어</div>
+          </div>
+          <div class="md-ad-foot">⭐ 셀링리뷰 적립</div>
         </div>
       </aside>
     </div>
@@ -3506,17 +4072,65 @@
     <div class="md-recommend">
       <div class="md-recommend-head">
         <div class="md-recommend-title">지금 핫한 추천 상품</div>
-        <a href="#" style="font-size:12px;color:var(--text-mute);font-weight:600;">AD</a>
+        <span style="font-size:11px;color:var(--text-mute);font-weight:600;border:1px solid var(--border);padding:2px 6px;border-radius:3px;">AD</span>
       </div>
       <div class="md-recommend-list">
-        <div class="md-rec-item"><div class="md-rec-thumb">💊</div><div class="md-rec-name">라피아 다이앤톨 정 100mg 10정 1정</div><div class="md-rec-price">3,000원</div></div>
-        <div class="md-rec-item"><div class="md-rec-thumb">💊</div><div class="md-rec-name">엘레쥬민 Acerion-Cream 1g</div><div class="md-rec-price">3,000원</div></div>
-        <div class="md-rec-item"><div class="md-rec-thumb">💊</div><div class="md-rec-name">에크미린 30g 1g</div><div class="md-rec-price">3,000원</div></div>
-        <div class="md-rec-item"><div class="md-rec-thumb">💊</div><div class="md-rec-name">변비물 12정 1정</div><div class="md-rec-price">3,000원</div></div>
-        <div class="md-rec-item"><div class="md-rec-thumb">💊</div><div class="md-rec-name">코빅 500mg 1정</div><div class="md-rec-price">3,000원</div></div>
-        <div class="md-rec-item"><div class="md-rec-thumb">💊</div><div class="md-rec-name">코빅 500mg 1정</div><div class="md-rec-price">3,000원</div></div>
-        <div class="md-rec-item"><div class="md-rec-thumb">💊</div><div class="md-rec-name">코빅 500mg 1정</div><div class="md-rec-price">3,000원</div></div>
-        <div class="md-rec-item"><div class="md-rec-thumb">💊</div><div class="md-rec-name">코빅 500mg 1정</div><div class="md-rec-price">3,000원</div></div>
+        <div class="md-rec-item">
+          <div class="md-rec-thumb">💊</div>
+          <div class="md-rec-name">리쥬비넥스</div>
+          <div class="md-rec-spec">500mg 10 정 (PTP)</div>
+          <div class="md-rec-price-row"><span class="md-rec-discount">11%</span> <span class="md-rec-price">53,000원</span> <span class="md-rec-orig">60,000원</span></div>
+          <span class="md-rec-tag">유통</span>
+        </div>
+        <div class="md-rec-item">
+          <div class="md-rec-thumb">🧴</div>
+          <div class="md-rec-name">애크논크림 Acenon Cream</div>
+          <div class="md-rec-spec">13그램/튜브</div>
+          <div class="md-rec-price-row"><span class="md-rec-discount">11%</span> <span class="md-rec-price">53,000원</span> <span class="md-rec-orig">60,000원</span></div>
+          <span class="md-rec-tag">유통</span>
+        </div>
+        <div class="md-rec-item">
+          <div class="md-rec-thumb">🌡</div>
+          <div class="md-rec-name">애크린젤</div>
+          <div class="md-rec-spec">20g</div>
+          <div class="md-rec-price-row"><span class="md-rec-discount">11%</span> <span class="md-rec-price">53,000원</span> <span class="md-rec-orig">60,000원</span></div>
+          <span class="md-rec-tag">유통</span>
+        </div>
+        <div class="md-rec-item">
+          <div class="md-rec-thumb">💊</div>
+          <div class="md-rec-name">벤포벨S</div>
+          <div class="md-rec-spec">120정/상자[(60정/병 x 2)</div>
+          <div class="md-rec-price-row"><span class="md-rec-discount">11%</span> <span class="md-rec-price">53,000원</span> <span class="md-rec-orig">60,000원</span></div>
+          <span class="md-rec-tag">유통</span>
+        </div>
+        <div class="md-rec-item">
+          <div class="md-rec-thumb">💊</div>
+          <div class="md-rec-name">큐립</div>
+          <div class="md-rec-spec">500mg 10 정 (PTP)</div>
+          <div class="md-rec-price-row"><span class="md-rec-discount">11%</span> <span class="md-rec-price">53,000원</span> <span class="md-rec-orig">60,000원</span></div>
+          <span class="md-rec-tag">유통</span>
+        </div>
+        <div class="md-rec-item">
+          <div class="md-rec-thumb">💊</div>
+          <div class="md-rec-name">큐립</div>
+          <div class="md-rec-spec">500mg 10 정 (PTP)</div>
+          <div class="md-rec-price-row"><span class="md-rec-discount">11%</span> <span class="md-rec-price">53,000원</span> <span class="md-rec-orig">60,000원</span></div>
+          <span class="md-rec-tag">유통</span>
+        </div>
+        <div class="md-rec-item">
+          <div class="md-rec-thumb">💊</div>
+          <div class="md-rec-name">큐립</div>
+          <div class="md-rec-spec">500mg 10 정 (PTP)</div>
+          <div class="md-rec-price-row"><span class="md-rec-discount">11%</span> <span class="md-rec-price">53,000원</span> <span class="md-rec-orig">60,000원</span></div>
+          <span class="md-rec-tag">유통</span>
+        </div>
+        <div class="md-rec-item">
+          <div class="md-rec-thumb">💊</div>
+          <div class="md-rec-name">큐립</div>
+          <div class="md-rec-spec">500mg 10 정 (PTP)</div>
+          <div class="md-rec-price-row"><span class="md-rec-discount">11%</span> <span class="md-rec-price">53,000원</span> <span class="md-rec-orig">60,000원</span></div>
+          <span class="md-rec-tag">유통</span>
+        </div>
       </div>
     </div>
 
@@ -3638,6 +4252,44 @@
   </div>
 </div>
 <!-- ───────── /MED DETAIL VIEW ───────── -->
+
+<!-- Image Zoom Modal -->
+<div class="img-modal" id="imgModal" onclick="closeImgModal()">
+  <button class="img-modal-close" onclick="closeImgModal()" aria-label="닫기">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="img-modal-content" onclick="event.stopPropagation()">💊</div>
+</div>
+
+<!-- Review Modal -->
+<div class="rv-modal" id="rvModal" onclick="if(event.target===this)closeReviewModal()">
+  <button class="rv-nav-arrow prev" id="rvPrev" onclick="reviewPrev()" aria-label="이전 리뷰">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div class="rv-modal-content">
+    <button class="rv-modal-close" onclick="closeReviewModal()" aria-label="닫기">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="rv-modal-head">
+      <div>
+        <div class="rv-modal-user" id="rvUser"></div>
+        <div class="rv-modal-date" id="rvDate"></div>
+      </div>
+      <span class="rv-modal-rating" id="rvRating"></span>
+    </div>
+    <div class="rv-modal-tags" id="rvTags"></div>
+    <p class="rv-modal-body" id="rvBody"></p>
+    <div class="rv-modal-foot">
+      <button>👍 도움돼요</button>
+      <button>💬 답글</button>
+      <button>🚩 신고</button>
+      <span class="rv-counter" id="rvCounter"></span>
+    </div>
+  </div>
+  <button class="rv-nav-arrow next" id="rvNext" onclick="reviewNext()" aria-label="다음 리뷰">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
 
 <!-- ───────── CHAT VIEW (풀페이지) ───────── -->
 <div id="chatView" hidden>
@@ -4021,6 +4673,38 @@
     return RV_PILL_POOL[key] || RV_PILL_POOL['일반의약품'];
   }
 
+  // 의약품별 브랜드 컬러 + 짧은 이름 (썸네일용)
+  const MED_BRAND = {
+    '타이레놀':      { color: '#E63946', short: '타이레놀', sub: '500mg' },
+    '게보린':        { color: '#FFC53D', short: '게보린', sub: '진통제',  textColor: '#1F1F1F' },
+    '판콜에이':      { color: '#F77F00', short: '판콜에이', sub: '내복액' },
+    '판피린':        { color: '#D62828', short: '판피린Q', sub: '액' },
+    '베나치오':      { color: '#06A77D', short: '베나치오', sub: '액' },
+    '훼스탈':        { color: '#D90429', short: '훼스탈+', sub: '소화제' },
+    '겔포스':        { color: '#003566', short: '겔포스M', sub: '제산제' },
+    '인사돌':        { color: '#8B5E3C', short: '인사돌', sub: '잇몸약' },
+    '센트룸':        { color: '#E63946', short: '센트룸', sub: 'Women' },
+    '비타500':       { color: '#FFD60A', short: '비타500', sub: '비타민 C', textColor: '#1F1F1F' },
+    '지르텍':        { color: '#5BC0EB', short: '지르텍', sub: '10mg' },
+    '알레그라':      { color: '#E5E5E5', short: '알레그라', sub: '120mg', textColor: '#1F1F1F' },
+    '클라리틴':      { color: '#0077B6', short: '클라리틴', sub: '10mg' },
+    '이지엔6':       { color: '#EF233C', short: '이지엔6', sub: 'PRO' },
+    '탁센':          { color: '#FFB627', short: '탁센400', sub: '소염진통제', textColor: '#1F1F1F' },
+    '챔프':          { color: '#E63946', short: '챔프', sub: '시럽' },
+    '맥시부펜':      { color: '#FF6B35', short: '맥시부펜', sub: '시럽' },
+    '코앤쿨':        { color: '#5BC0EB', short: '코앤쿨', sub: '스프레이' },
+    '서스펜':        { color: '#E63946', short: '서스펜', sub: '8시간' },
+    '아론':          { color: '#7209B7', short: '아론정', sub: '수면보조' },
+    '슬리펠':        { color: '#9D4EDD', short: '슬리펠', sub: '수면유도' },
+    '레돌민':        { color: '#3A86FF', short: '레돌민', sub: '천연수면' },
+  };
+  function getBrand(name) {
+    for (const key of Object.keys(MED_BRAND)) {
+      if (name.includes(key)) return MED_BRAND[key];
+    }
+    return { color: '#6C757D', short: name.split(' ')[0], sub: '' };
+  }
+
   // 카테고리 추론 (Figma 카테고리 매핑)
   const CAT_INFO = {
     '진통제':       { ico: '💊', name: '해열/소염/진통' },
@@ -4061,12 +4745,19 @@
       : '';
     const catInfo = m.catInfo || pickCatInfo(m.popular || m.detail || m.name);
     const catRank = m.catRank || rank;
+    const brand = getBrand(m.name);
+    const thumbBg = brand.color;
+    const thumbTextColor = brand.textColor || '#fff';
+    const thumbHTML = `<div class="thumb-fallback" style="background:${thumbBg};color:${thumbTextColor};">
+      <div>${brand.short}</div>
+      ${brand.sub ? `<div class="sub">${brand.sub}</div>` : ''}
+    </div>`;
     return `
       <div class="ans-card" onclick="openMedDetail('${dataAttr}')">
         <button type="button" class="ans-card-save" aria-label="저장" onclick="event.stopPropagation();this.classList.toggle('saved');">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
-        <div class="ans-card-thumb">💊</div>
+        <div class="ans-card-thumb">${thumbHTML}</div>
         <div class="ans-card-info">
           <div class="ans-card-maker-top">${m.maker}</div>
           <div class="ans-card-title">
@@ -4129,6 +4820,7 @@
     _prevView = getCurrentView();
     try {
       const m = JSON.parse(decodeURIComponent(encoded));
+      try { localStorage.setItem('otcLastMed', encoded); } catch (e) {}
       const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
       set('mdMaker', m.maker || '');
       set('mdName', m.fullName || m.name || '');
@@ -4150,15 +4842,18 @@
     showMedDetailView();
   }
   function goBackFromMedDetail() {
-    // 브라우저 history가 있으면 뒤로
-    if (history.length > 1 && document.referrer) {
-      try { history.back(); return; } catch (e) {}
-    }
-    // 폴백: 추적한 이전 뷰로
     const v = _prevView || 'home';
-    if (v === 'chat') showChatView();
+    if (v === 'chat') {
+      // 챗에서 왔으면 마지막 질문·답변 다시 표시
+      try {
+        const lastQ = localStorage.getItem('otcLastQuestion');
+        if (lastQ) { ask(lastQ); return; }
+      } catch (e) {}
+      showAiView();
+    }
     else if (v === 'ai') showAiView();
     else if (v === 'faq') showFaqView();
+    else if (v === 'med') showHomeView();
     else showHomeView();
   }
   function showMedDetailView(skipHash) {
@@ -4169,6 +4864,102 @@
     if (!skipHash) history.pushState({ view: 'med' }, '', '#med');
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
+  // 종류 chip toggle
+  function mdSelectChip(el) {
+    el.parentElement.querySelectorAll('.md-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Product image zoom modal
+  function openImgModal() {
+    document.getElementById('imgModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeImgModal() {
+    document.getElementById('imgModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Toggle Selling Review expand/collapse
+  function toggleRcExpand(btn) {
+    const bars = document.getElementById('mdRcBars');
+    if (!bars) return;
+    const expanded = bars.classList.toggle('expanded');
+    btn.textContent = expanded ? '접기 ▲' : '펼쳐보기 ▼';
+  }
+
+  // Review data (mock — would come from API)
+  const REVIEWS_LIST = [
+    { user: '강****국', date: '2025.05.15', rating: 4.8,
+      tags: ['💊 진정 효과 빠름','🫃 부착력 좋음','😅 자극 적음','💧 효능 가격 좋은'],
+      body: '알약이 작아서 섭취가 용이하고 변비와 설사에 모두 작용하여 유산균처럼 매일 먹기 좋고, 소화제와도 유사한 효과가 있어요. 환자에게 권할 때 부담스럽지 않은 가격이고 약국에서도 재고 회전이 빠른 편이라 추천합니다.' },
+    { user: '스리***국', date: '2025.05.15', rating: 4.7,
+      tags: ['💊 진정 효과 빠름','🫃 부착력 좋음','😅 자극 적음','💧 효능 가격 좋은'],
+      body: '알약이 작아서 섭취가 용이하고 변비와 설사에 모두 작용하여 유산균처럼 매일 먹기 좋고, 소화제와도 유사한 효과가 있어요. 처방받지 않아도 안심하고 권할 수 있어서 약국 운영에 도움이 많이 됩니다.' },
+    { user: '약****민', date: '2025.05.10', rating: 4.9,
+      tags: ['🛡 안전성 높음','⚡ 빠른 흡수','🧊 두통 진정 우수'],
+      body: '오랫동안 권해온 제품인데 환자 만족도가 가장 높아요. 특히 두통 환자들에게 효과가 빠르게 나타나서 재방문 시 다시 찾으시는 경우가 많습니다. 가격대도 부담 없어서 모든 연령대에 권하기 좋아요.' },
+    { user: '제********', date: '2025.05.08', rating: 4.6,
+      tags: ['👍 가성비 우수','😌 환자 만족도 높음','🤝 상호작용 적음'],
+      body: '와파린 복용 환자에게 권할 수 있는 안전한 옵션이라 정말 유용합니다. 다른 약과의 상호작용 우려가 적어서 고령 환자분들께도 안심하고 권할 수 있어요. 셀링리뷰에 자주 등장하는 키워드가 모두 만족스럽습니다.' },
+    { user: '바****팜', date: '2025.05.05', rating: 4.5,
+      tags: ['🌡 발열 신속 완화','💊 복용 편함','💰 가격 합리적'],
+      body: '소아 환자 보호자에게 권하기 좋은 제품입니다. 알약 크기가 작아서 삼키기 편하고 발열 환자에게 빠른 효과를 보입니다. 약국 매대에 항상 비치해두는 필수 품목 중 하나에요.' },
+  ];
+  let _currentReviewIdx = 0;
+
+  function openReviewModal(userOrIdx, date, rating, tagsArr, body) {
+    // Support both (idx) and (user, date, rating, tags, body) calls
+    let idx;
+    if (typeof userOrIdx === 'number') {
+      idx = userOrIdx;
+    } else {
+      // Find by user name, fall back to 0
+      idx = REVIEWS_LIST.findIndex(r => r.user === userOrIdx);
+      if (idx < 0) {
+        // Insert ad-hoc review and use last index (legacy support)
+        REVIEWS_LIST.push({ user: userOrIdx, date, rating, tags: tagsArr, body });
+        idx = REVIEWS_LIST.length - 1;
+      }
+    }
+    _currentReviewIdx = idx;
+    renderReviewModal();
+    document.getElementById('rvModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function renderReviewModal() {
+    const r = REVIEWS_LIST[_currentReviewIdx];
+    if (!r) return;
+    document.getElementById('rvUser').textContent = r.user;
+    document.getElementById('rvDate').textContent = r.date;
+    document.getElementById('rvRating').textContent = '★ ' + r.rating;
+    document.getElementById('rvTags').innerHTML = r.tags.map(t => `<span class="qtag">${t}</span>`).join('');
+    document.getElementById('rvBody').textContent = r.body;
+    const counterEl = document.getElementById('rvCounter');
+    if (counterEl) counterEl.textContent = `${_currentReviewIdx + 1} / ${REVIEWS_LIST.length}`;
+    const prev = document.getElementById('rvPrev');
+    const next = document.getElementById('rvNext');
+    if (prev) prev.disabled = _currentReviewIdx === 0;
+    if (next) next.disabled = _currentReviewIdx === REVIEWS_LIST.length - 1;
+  }
+  function reviewPrev() {
+    if (_currentReviewIdx > 0) { _currentReviewIdx--; renderReviewModal(); }
+  }
+  function reviewNext() {
+    if (_currentReviewIdx < REVIEWS_LIST.length - 1) { _currentReviewIdx++; renderReviewModal(); }
+  }
+  function closeReviewModal() {
+    document.getElementById('rvModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => {
+    const m = document.getElementById('rvModal');
+    if (!m || !m.classList.contains('open')) return;
+    if (e.key === 'Escape') closeReviewModal();
+    else if (e.key === 'ArrowRight') reviewNext();
+    else if (e.key === 'ArrowLeft') reviewPrev();
+  });
+
   function mdSwitchTab(btnEl, tab) {
     btnEl.parentElement.querySelectorAll('.md-tab').forEach(b => b.classList.remove('active'));
     btnEl.classList.add('active');
@@ -4606,8 +5397,18 @@
   (function routeOnLoad() {
     const hash = (window.location.hash || '').replace('#', '');
     if (hash === 'faq') showFaqView(true);
+    else if (hash === 'med') {
+      // 상세 페이지: 마지막 med 데이터 복원
+      try {
+        const lastMed = localStorage.getItem('otcLastMed');
+        if (lastMed) {
+          openMedDetail(lastMed);
+          return;
+        }
+      } catch (e) {}
+      showHomeView(true);
+    }
     else if (hash === 'chat') {
-      // 챗 뷰: 마지막 질문 복원
       try {
         const lastQ = localStorage.getItem('otcLastQuestion');
         if (lastQ) {
