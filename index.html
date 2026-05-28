@@ -1080,18 +1080,22 @@
     margin-top: 8px;
     align-self: flex-start;
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 10px 4px 4px;
+    padding: 4px 12px 4px 4px;
     background: #F4F5F7;
+    border: none;
     border-radius: 999px;
     font-size: 11.5px; color: var(--text-sub);
     font-weight: 700;
     width: fit-content;
+    cursor: pointer;
+    transition: background .15s ease;
   }
+  .ans-card-cat-foot:hover { background: var(--primary-soft); color: var(--primary-strong); }
   .ans-card-cat-foot .cat-ico {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: #fff;
+    width: 26px; height: 26px; border-radius: 7px;
     display: inline-flex; align-items: center; justify-content: center;
-    font-size: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
   }
   .ans-card-cat-foot .rk-suffix { color: var(--primary-strong); font-weight: 800; }
   .ans-card-actions {
@@ -1205,6 +1209,58 @@
   }
   .ans-source b { color: var(--text-sub); }
 
+  /* Follow-up chips */
+  .ans-followup-wrap {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #F4F5F7;
+  }
+  .ans-followup-label {
+    font-size: 13px; font-weight: 800; color: var(--text);
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-bottom: 12px;
+  }
+  .ans-followup {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .follow-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 14px 10px 16px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+    line-height: 1.3;
+    text-align: left;
+    letter-spacing: -0.2px;
+  }
+  .follow-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary-strong);
+    background: var(--primary-soft);
+  }
+  .follow-chip svg {
+    color: var(--text-mute);
+    flex-shrink: 0;
+    transition: color .15s ease, transform .15s ease;
+  }
+  .follow-chip:hover svg {
+    color: var(--primary);
+    transform: translateX(2px);
+  }
+  .follow-chip.primary {
+    background: var(--primary-soft);
+    border-color: var(--primary-lighter);
+    color: var(--primary-strong);
+    font-weight: 700;
+  }
+  .follow-chip.primary svg { color: var(--primary); }
+  .follow-chip.primary:hover { background: var(--primary); color: #fff; }
+  .follow-chip.primary:hover svg { color: #fff; }
+
   /* ───── Pharmall+ Home Layout ───── */
   #homeView { background: #F4F6F8; min-height: 100vh; }
 
@@ -1233,6 +1289,10 @@
     background: #fff;
     border-bottom: 1px solid var(--border);
     position: sticky; top: 0; z-index: 50;
+    transition: transform .25s ease;
+  }
+  body.header-hidden .ph-header {
+    transform: translateY(-100%);
   }
   .ph-header-inner {
     max-width: 1280px; margin: 0 auto;
@@ -1270,23 +1330,50 @@
     margin-left: 1px;
   }
   .ph-nav a:hover { color: var(--primary-strong); }
-  .ph-nav a.new::after {
-    content: "N"; position: absolute; top: 2px; right: -14px;
-    width: 14px; height: 14px; border-radius: 50%;
-    background: #FF4D4F; color: #fff; font-size: 9px; font-weight: 800;
-    display: inline-flex; align-items: center; justify-content: center;
-  }
+  /* AI Nav button (animated gradient border + glow) */
   .ph-nav a.ai-nav {
-    color: var(--primary-strong);
-    background: var(--primary-soft);
-    padding: 6px 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px 8px 12px;
+    font-size: 13.5px; font-weight: 800;
     border-radius: 999px;
-    font-size: 13px;
-    display: inline-flex; align-items: center; gap: 5px;
+    background:
+      linear-gradient(#fff, #fff) padding-box,
+      linear-gradient(90deg, #2F54EB 0%, #85A5FF 25%, #DCE5FF 50%, #85A5FF 75%, #2F54EB 100%) border-box;
+    background-size: 100% 100%, 300% 100%;
+    border: 2px solid transparent;
+    transition: transform .2s cubic-bezier(.4,0,.2,1), box-shadow .2s ease;
+    animation: aiBorderSlide 3s linear infinite;
+  }
+  @keyframes aiBorderSlide {
+    0%   { background-position: 0 0, 0% 50%; }
+    100% { background-position: 0 0, -300% 50%; }
+  }
+  .ph-nav a.ai-nav:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 18px rgba(47,84,235,0.22);
   }
   .ph-nav a.ai-nav .star {
-    width: 14px; height: 14px;
+    width: 15px; height: 15px;
     color: var(--primary);
+    animation: starPulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(47,84,235,0.4));
+  }
+  @keyframes starPulse {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.2) rotate(20deg); opacity: 0.9; }
+  }
+  .ph-nav a.ai-nav .ai-label {
+    background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--primary));
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: aiLabelShimmer 3s linear infinite;
+    letter-spacing: -0.2px;
+  }
+  @keyframes aiLabelShimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
   }
 
   /* AI-emphasized search bar BAND (below header) */
@@ -3076,38 +3163,77 @@
   }
   .md-rec-price { font-size: 12px; font-weight: 800; color: #FF4D4F; }
 
-  /* Tabs */
+  /* Tabs (sticky scroll tabs) */
   .md-tabs {
     display: grid; grid-template-columns: 1fr 1fr 1fr;
     gap: 0;
     margin-top: 20px;
     background: #fff;
-    border-radius: 12px 12px 0 0;
+    border-radius: 0;
     overflow: hidden;
-    border: 1px solid var(--border);
-    border-bottom: none;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .md-tabs-sticky {
+    position: sticky;
+    top: 60px;
+    z-index: 20;
+    transition: top .25s ease;
+  }
+  body.header-hidden .md-tabs-sticky {
+    top: 0;
   }
   .md-tab {
-    padding: 14px;
-    background: transparent;
+    padding: 18px 14px;
+    background: #fff;
     border: none;
-    font-size: 14px; font-weight: 700;
-    color: var(--text-sub);
+    font-size: 15px; font-weight: 700;
+    color: var(--text);
     cursor: pointer;
-    border-bottom: 2px solid transparent;
+    transition: all .15s ease;
+    letter-spacing: -0.2px;
   }
+  .md-tab:hover { background: #FAFBFC; }
   .md-tab.active {
     color: #fff;
     background: var(--primary);
+    font-weight: 800;
   }
 
   .md-tab-content {
     background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 0 0 12px 12px;
     padding: 0;
-    overflow: hidden;
   }
+
+  /* Scroll anchor target (with offset for sticky tabs) */
+  .md-anchor {
+    scroll-margin-top: 64px;
+  }
+
+  /* 의약품 정보 content */
+  .md-info-section {
+    padding: 32px 4px;
+  }
+  .md-info-h {
+    font-size: 17px; font-weight: 800; color: var(--text);
+    margin: 28px 0 12px;
+    letter-spacing: -0.3px;
+  }
+  .md-info-h:first-child { margin-top: 0; }
+  .md-info-block {
+    font-size: 13.5px; color: var(--text);
+    line-height: 1.85;
+  }
+  .md-info-block > div,
+  .md-info-block > p {
+    margin: 0;
+  }
+  .md-info-block p + p { margin-top: 14px; }
+  .md-info-block b { font-weight: 800; }
+
+  /* Reviews section adjust for new structure */
+  #mdTabReview .md-reviews { padding: 24px 0; }
+  #mdTabDetail { padding: 0; }
   .md-tab-banner {
     background: linear-gradient(180deg, #DC2626 0%, #B91C1C 100%);
     color: #fff;
@@ -3188,6 +3314,350 @@
   }
   .md-pg.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
+  /* ═══════════════════════════════════════════
+     카테고리 랭킹 페이지 (Figma 8791:15191)
+     ═══════════════════════════════════════════ */
+  #catListView { background: #fff; min-height: 100vh; }
+  .cat-shell {
+    max-width: 1280px; margin: 0 auto;
+    padding: 16px 24px 60px;
+  }
+  /* 카테고리 가로 스크롤 */
+  .cat-icons-wrap {
+    position: relative;
+    margin: 12px 0 16px;
+  }
+  .cat-icons {
+    display: flex; gap: 8px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 4px 0;
+    scrollbar-width: none;
+  }
+  .cat-icons::-webkit-scrollbar { display: none; }
+  .cat-icon-item {
+    flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 8px 4px;
+    cursor: pointer;
+    min-width: 76px;
+  }
+  .cat-icon-circle {
+    width: 60px; height: 60px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    transition: all .15s ease;
+    position: relative;
+  }
+  .cat-icon-circle img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .cat-icon-item:hover .cat-icon-circle { transform: scale(1.04); }
+  .cat-icon-item.active .cat-icon-circle {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+  .cat-icon-label {
+    font-size: 12px; color: var(--text);
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .cat-icon-item.active .cat-icon-label {
+    color: var(--primary-strong);
+    font-weight: 800;
+  }
+  .cat-icons-next {
+    position: absolute; right: -8px; top: 50%; transform: translateY(-50%);
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    color: var(--text-sub);
+  }
+  .cat-icons-next:hover { color: var(--text); background: var(--bg-soft); }
+
+  /* 성분 sub-filter chips */
+  .cat-subchips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 16px;
+  }
+  .cat-subchip {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--border);
+    font-size: 13px; font-weight: 600; color: var(--text-sub);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .cat-subchip:hover { color: var(--text); }
+  .cat-subchip.active {
+    border-color: var(--primary);
+    color: var(--primary-strong);
+    background: var(--primary-soft);
+    font-weight: 800;
+  }
+
+  /* Top tabs (전체/바로팜/외부몰) */
+  .cat-tabs {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    background: #F4F6F8;
+    border-radius: 0;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .cat-tab {
+    padding: 16px;
+    background: transparent;
+    border: none;
+    font-size: 14px; font-weight: 700;
+    color: var(--text-sub);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .cat-tab:hover { color: var(--text); }
+  .cat-tab.active {
+    background: var(--primary);
+    color: #fff;
+    font-weight: 800;
+  }
+
+  /* Filter row */
+  .cat-filter-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-radius: 0;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .cat-filter-dropdown {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 10px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12.5px; font-weight: 600; color: var(--text);
+    cursor: pointer;
+  }
+  .cat-filter-dropdown:hover { border-color: var(--text-sub); }
+  .cat-filter-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.5px; color: var(--text); font-weight: 600;
+    cursor: pointer;
+  }
+  .cat-filter-toggle .switch {
+    width: 32px; height: 18px; border-radius: 999px;
+    background: #D9D9D9;
+    position: relative;
+    transition: background .15s ease;
+  }
+  .cat-filter-toggle .switch::after {
+    content: '';
+    position: absolute; left: 2px; top: 2px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #fff;
+    transition: transform .15s ease;
+  }
+  .cat-filter-toggle.on .switch { background: var(--primary); }
+  .cat-filter-toggle.on .switch::after { transform: translateX(14px); }
+  .cat-filter-right {
+    margin-left: auto;
+  }
+
+  /* Product list (similar to ans-card but standalone) */
+  .cat-products { display: flex; flex-direction: column; }
+  .cat-product {
+    display: grid;
+    grid-template-columns: 32px 1fr 140px 280px;
+    gap: 18px;
+    padding: 24px 0;
+    border-bottom: 1px solid #F4F5F7;
+    align-items: start;
+  }
+  .cat-product:last-child { border-bottom: none; }
+  @media (max-width: 900px) {
+    .cat-product { grid-template-columns: 32px 1fr 100px; }
+    .cat-product .cat-product-review { grid-column: 2 / -1; grid-row: 2; }
+  }
+  .cat-product-rank {
+    width: 26px; height: 26px; border-radius: 6px;
+    background: #111827;
+    color: #fff;
+    font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .cat-product-info { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .cat-pi-maker {
+    font-size: 12px; color: var(--text-mute); font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .cat-pi-name {
+    font-size: 17px; font-weight: 800; color: var(--text);
+    letter-spacing: -0.3px; line-height: 1.3;
+    display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 6px;
+  }
+  .cat-pi-name .spec {
+    font-size: 12px; color: var(--text-mute); font-weight: 600;
+    border-left: 1px solid #E5E7EB;
+    padding-left: 8px;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .cat-pi-name .utong {
+    background: var(--primary-soft); color: var(--primary-strong);
+    font-size: 10.5px; font-weight: 800;
+    padding: 2px 6px; border-radius: 3px;
+    margin-left: 4px;
+  }
+  .cat-pi-price {
+    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .cat-pi-discount { font-size: 14px; font-weight: 800; color: #FF4D4F; }
+  .cat-pi-num { font-size: 16px; font-weight: 800; color: var(--text); }
+  .cat-pi-orig { font-size: 12px; color: var(--text-mute); text-decoration: line-through; }
+  .cat-pi-cat {
+    font-size: 12px; color: var(--text-sub);
+    display: flex; align-items: center; gap: 4px;
+    margin-top: 4px;
+  }
+  .cat-pi-cat .sep { color: #D9D9D9; }
+  .cat-pi-order {
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px 9px 14px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--border);
+    font-size: 13px; font-weight: 700; color: var(--text);
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all .15s ease;
+  }
+  .cat-pi-order:hover { border-color: var(--primary); color: var(--primary-strong); background: var(--primary-soft); }
+  .cat-pi-order .b-mark {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 900; font-size: 11px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .cat-product-thumb {
+    width: 140px; height: 140px; border-radius: 8px;
+    background: linear-gradient(135deg, #EAF0F8 0%, #D5E0F0 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 50px;
+    align-self: flex-start;
+    overflow: hidden;
+  }
+  .cat-product-thumb.cat-product-thumb-empty {
+    background: transparent;
+    visibility: hidden;
+  }
+  .cat-product-thumb .thumb-fallback {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%;
+    padding: 12px; text-align: center;
+    color: #fff; font-weight: 900; font-size: 14px; letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+  .cat-product-thumb .thumb-fallback .sub {
+    font-size: 11px; margin-top: 4px; opacity: 0.85; font-weight: 600;
+  }
+
+  /* Review section in product card */
+  .cat-product-review { min-width: 0; }
+  .cat-pr-label {
+    font-size: 13px; font-weight: 800;
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-bottom: 6px;
+  }
+  .cat-pr-label.selling { color: #FF8A3D; }
+  .cat-pr-label.external { color: var(--primary); }
+  .cat-pr-headline {
+    font-size: 12.5px; color: var(--primary-strong); font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .cat-pr-pills {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    margin-bottom: 8px;
+  }
+  .cat-pr-pill {
+    background: var(--bg-soft);
+    border: 1px solid #F0F0F0;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 11.5px; font-weight: 700; color: var(--text-sub);
+  }
+  .cat-pr-text {
+    font-size: 12px; color: var(--text-sub); line-height: 1.5;
+    overflow: hidden; text-overflow: ellipsis;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    position: relative;
+    padding-right: 50px;
+  }
+  .cat-pr-mini-thumb {
+    position: absolute; right: 0; bottom: 0;
+    width: 44px; height: 44px; border-radius: 6px;
+    background: linear-gradient(135deg, #FFE7D6, #FFB85C);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  /* Empty review state */
+  .cat-pr-empty {
+    text-align: center;
+    padding: 12px 0;
+    position: relative;
+  }
+  .cat-pr-empty-text {
+    font-size: 12.5px; color: var(--text); line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .cat-pr-empty-text .x2 { color: #10B981; font-weight: 800; }
+  .cat-pr-empty-text .point { color: var(--primary); font-weight: 800; }
+  .cat-pr-x2-badge {
+    position: absolute; top: -10px; right: 0;
+    background: linear-gradient(135deg, #34D399, #10B981);
+    color: #fff;
+    font-size: 14px; font-weight: 900;
+    padding: 6px 12px;
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+  }
+  .cat-pr-write-btn {
+    padding: 8px 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 12.5px; font-weight: 700; color: var(--text);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .cat-pr-write-btn:hover { border-color: var(--primary); color: var(--primary-strong); background: var(--primary-soft); }
+
+  /* Pagination */
+  .cat-pagination {
+    display: flex; justify-content: center; gap: 4px;
+    padding: 32px 0;
+  }
+  .cat-pg-btn {
+    width: 36px; height: 36px;
+    background: transparent;
+    border: none;
+    font-size: 13px; font-weight: 700; color: var(--text-sub);
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .cat-pg-btn:hover { background: var(--bg-soft); color: var(--text); }
+  .cat-pg-btn.active { background: var(--primary); color: #fff; }
+
   /* ───── Back button ───── */
   .back-btn {
     display: inline-flex; align-items: center; gap: 6px;
@@ -3242,9 +3712,9 @@
       <a href="#">오픈<span class="plus-sup">Plus</span></a>
       <a href="#">에듀<span class="plus-sup">Plus</span></a>
       <a href="#">의약품<span class="plus-sup">Plus</span></a>
-      <a href="#" class="ai-nav new" onclick="showAiView();return false;">
+      <a href="#" class="ai-nav" onclick="showAiView();return false;">
         <svg class="star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L9.5 8.5L2 11l7.5 2.5L12 21l2.5-7.5L22 11l-7.5-2.5L12 1z"/></svg>
-        OTC<span style="color:var(--primary)">+</span> AI
+        <span class="ai-label">AI</span>
       </a>
     </nav>
 
@@ -3843,9 +4313,9 @@
     <div class="md-crumb">
       <a href="#" onclick="showHomeView();return false;">홈</a>
       <span class="sep">›</span>
-      <a href="#">일반의약품</a>
+      <a href="#" onclick="showCatList('전체');return false;">일반의약품</a>
       <span class="sep">›</span>
-      <a href="#">해열·진통제</a>
+      <a href="#" onclick="showCatList('해열/소염/진통');return false;">해열/소염/진통</a>
       <span class="sep">›</span>
       <span style="color:var(--text);" id="mdCrumbName">아세트아미노펜정 단성분</span>
     </div>
@@ -4134,19 +4604,68 @@
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="md-tabs">
-      <button class="md-tab active" onclick="mdSwitchTab(this, 'detail')">제품상세</button>
-      <button class="md-tab" onclick="mdSwitchTab(this, 'info')">의약품 정보</button>
-      <button class="md-tab" onclick="mdSwitchTab(this, 'review')">셀링리뷰(456)</button>
+    <!-- Tabs (sticky, scroll-to-section) -->
+    <div class="md-tabs md-tabs-sticky">
+      <button class="md-tab active" onclick="mdScrollToTab('detail', this)">제품상세</button>
+      <button class="md-tab" onclick="mdScrollToTab('info', this)">의약품 정보</button>
+      <button class="md-tab" onclick="mdScrollToTab('review', this)">셀링리뷰(456)</button>
     </div>
 
     <div class="md-tab-content">
-      <div id="mdTabDetail">
+      <!-- 제품상세 -->
+      <section id="mdTabDetail" class="md-anchor">
         <img src="./assets/med_detail_8804.png" alt="제품 상세" style="display:block;width:100%;height:auto;"/>
-      </div>
+      </section>
 
-      <div id="mdTabReview" hidden>
+      <!-- 의약품 정보 -->
+      <section id="mdTabInfo" class="md-anchor md-info-section">
+        <h3 class="md-info-h">성분</h3>
+        <div class="md-info-block">
+          <div>총량: 1정 280밀리그램</div>
+          <div>성분명: 도네페질염산염</div>
+          <div>분량: 10.0</div>
+          <div>단위: 밀리그램</div>
+          <div>규격: 별첨규격(전과동)</div>
+          <div>성분정보:</div>
+          <div>비고:</div>
+        </div>
+
+        <h3 class="md-info-h">효능·효과</h3>
+        <div class="md-info-block">
+          <p>갑상선기능저하증, 점액부종, 크레틴병</p>
+        </div>
+
+        <h3 class="md-info-h">용법·용량</h3>
+        <div class="md-info-block">
+          <p>성인: 레보티록신나트륨으로서 보통 1일 1회 25~400mg 경구투여한다. 일반적인 초회 투여량은 25-100mg이며 유지량은 100-500이다.</p>
+          <p>단, 연령 및 증상에 따라 적절히 증감한다.</p>
+        </div>
+
+        <h3 class="md-info-h">주의사항</h3>
+        <div class="md-info-block">
+          <p><b>1. 경고</b></p>
+          <p>갑상선 기능이 정상인 사람이 체중감소를 위해 갑상선 호르몬제를 단독 또는 다른 약물과 병용투여하는 것은 적절하지 않으며 효과가 없다. 특히 식욕감퇴 효과가 있는 교감신경 흥분성 아민과 병용 투여시 생명을 위협할 정도의 심각한 독성이 발생할 수 있다.</p>
+          <p><b>1. 다음 환자에게는 투여하지 말 것</b></p>
+          <p>1) 이 약의 주성분 및 디히드로피딘계 유도체에 과민증이 있는 환자</p>
+          <p>2) 임부 또는 임신하고 있을 가능성이 있는 여성 및 수유부</p>
+          <p>3) 중증의 신장애환자(크레아티닌 청소율 10mL/min 미만)(사용 경험이 없음)</p>
+          <p>4) 중증의 간장애, 담관성 간경화, 담도폐쇄</p>
+        </div>
+
+        <h3 class="md-info-h">전문가 주의사항</h3>
+        <div class="md-info-block">
+          <p><b>1. 경고</b></p>
+          <p>갑상선 기능이 정상인 사람이 체중감소를 위해 갑상선 호르몬제를 단독 또는 다른 약물과 병용투여하는 것은 적절하지 않으며 효과가 없다. 특히 식욕감퇴 효과가 있는 교감신경 흥분성 아민과 병용 투여시 생명을 위협할 정도의 심각한 독성이 발생할 수 있다.</p>
+          <p><b>1. 다음 환자에게는 투여하지 말 것</b></p>
+          <p>1) 이 약의 주성분 및 디히드로피딘계 유도체에 과민증이 있는 환자</p>
+          <p>2) 임부 또는 임신하고 있을 가능성이 있는 여성 및 수유부</p>
+          <p>3) 중증의 신장애환자(크레아티닌 청소율 10mL/min 미만)(사용 경험이 없음)</p>
+          <p>4) 중증의 간장애, 담관성 간경화, 담도폐쇄</p>
+        </div>
+      </section>
+
+      <!-- 셀링리뷰 -->
+      <section id="mdTabReview" class="md-anchor">
         <div class="md-reviews">
           <div class="md-review-row">
             <div class="md-review-head">
@@ -4236,22 +4755,89 @@
             <button class="md-pg">›</button>
           </div>
         </div>
-      </div>
-
-      <div id="mdTabInfo" hidden>
-        <div style="padding:24px;font-size:13.5px;color:var(--text-sub);line-height:1.8;">
-          <h3 style="font-size:15px;font-weight:800;color:var(--text);margin:0 0 8px;">효능·효과</h3>
-          <p>감기로 인한 발열 및 동통(통증), 두통, 신경통, 근육통, 월경통, 염좌통(삔 통증)</p>
-          <h3 style="font-size:15px;font-weight:800;color:var(--text);margin:20px 0 8px;">용법·용량</h3>
-          <p>성인 1회 1~2정씩 1일 3~4회. 동일증상에 대해 다른 진통제와 병용 투여하지 말 것.</p>
-          <h3 style="font-size:15px;font-weight:800;color:var(--text);margin:20px 0 8px;">주의사항</h3>
-          <p>1일 최대 4g(4,000mg)을 초과하지 말 것. 음주 시 간 손상 위험.</p>
-        </div>
-      </div>
+      </section>
     </div>
   </div>
 </div>
 <!-- ───────── /MED DETAIL VIEW ───────── -->
+
+<!-- ───────── CATEGORY LIST VIEW (Figma 8791:15191) ───────── -->
+<div id="catListView" hidden>
+  <div class="cat-shell">
+    <!-- Breadcrumb -->
+    <div class="md-crumb" style="padding: 4px 0 12px;">
+      <a href="#" onclick="showHomeView();return false;">홈</a>
+      <span class="sep">›</span>
+      <a href="#" onclick="showCatList('전체');return false;">일반의약품</a>
+      <span class="sep">›</span>
+      <span style="color:var(--text);" id="catCrumbName">해열/소염/진통</span>
+    </div>
+
+    <!-- Category icons row -->
+    <div class="cat-icons-wrap">
+      <div class="cat-icons" id="catIcons"></div>
+      <button class="cat-icons-next" aria-label="다음">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <!-- Sub-filter chips (성분) -->
+    <div class="cat-subchips">
+      <button class="cat-subchip active">아세트아미노펜, 단일제</button>
+      <button class="cat-subchip">아세트아미노펜 복합제</button>
+      <button class="cat-subchip">아세트아미노펜 복합제(감기약)</button>
+      <button class="cat-subchip">덱시부프로펜</button>
+      <button class="cat-subchip">이부프로펜, 단일제</button>
+      <button class="cat-subchip">이부프로펜 복합제</button>
+      <button class="cat-subchip">이부프로펜+α</button>
+      <button class="cat-subchip">이부프로펜+이뉴페</button>
+      <button class="cat-subchip">나프록센</button>
+    </div>
+
+    <!-- Top tabs -->
+    <div class="cat-tabs">
+      <button class="cat-tab active">전체 (1,254)</button>
+      <button class="cat-tab">바로팜 상품 (1,234)</button>
+      <button class="cat-tab">외부몰 상품 (20)</button>
+    </div>
+
+    <!-- Filter row -->
+    <div class="cat-filter-row">
+      <div class="cat-filter-dropdown">
+        주문많은순
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="cat-filter-dropdown">
+        제약사 전체
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="cat-filter-toggle" onclick="this.classList.toggle('on')">
+        <span class="switch"></span>
+        유통만 보기
+      </div>
+      <div class="cat-filter-right">
+        <div class="cat-filter-dropdown">
+          50개씩 보기
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product list -->
+    <div class="cat-products" id="catProducts"></div>
+
+    <!-- Pagination -->
+    <div class="cat-pagination">
+      <button class="cat-pg-btn">‹</button>
+      <button class="cat-pg-btn active">1</button>
+      <button class="cat-pg-btn">2</button>
+      <button class="cat-pg-btn">3</button>
+      <button class="cat-pg-btn">4</button>
+      <button class="cat-pg-btn">5</button>
+      <button class="cat-pg-btn">›</button>
+    </div>
+  </div>
+</div>
 
 <!-- Image Zoom Modal -->
 <div class="img-modal" id="imgModal" onclick="closeImgModal()">
@@ -4498,9 +5084,10 @@
   const chatView = document.getElementById('chatView');
   const faqView  = document.getElementById('faqView');
   const medDetailView = document.getElementById('medDetailView');
+  const catListView = document.getElementById('catListView');
   function showAllViewsHidden() {
     homeView.hidden = true; aiView.hidden = true; chatView.hidden = true;
-    faqView.hidden = true; medDetailView.hidden = true;
+    faqView.hidden = true; medDetailView.hidden = true; catListView.hidden = true;
   }
   function showHomeView(skipHash) {
     showAllViewsHidden();
@@ -4673,14 +5260,14 @@
     return RV_PILL_POOL[key] || RV_PILL_POOL['일반의약품'];
   }
 
-  // 의약품별 브랜드 컬러 + 짧은 이름 (썸네일용)
+  // 의약품별 브랜드 컬러 + 짧은 이름 + 이미지 (썸네일용)
   const MED_BRAND = {
-    '타이레놀':      { color: '#E63946', short: '타이레놀', sub: '500mg' },
+    '타이레놀':      { img: './assets/meds/tylenol.png', color: '#E63946', short: '타이레놀', sub: '500mg' },
     '게보린':        { color: '#FFC53D', short: '게보린', sub: '진통제',  textColor: '#1F1F1F' },
     '판콜에이':      { color: '#F77F00', short: '판콜에이', sub: '내복액' },
     '판피린':        { color: '#D62828', short: '판피린Q', sub: '액' },
     '베나치오':      { color: '#06A77D', short: '베나치오', sub: '액' },
-    '훼스탈':        { color: '#D90429', short: '훼스탈+', sub: '소화제' },
+    '훼스탈':        { img: './assets/meds/hestal.png', color: '#D90429', short: '훼스탈+', sub: '소화제' },
     '겔포스':        { color: '#003566', short: '겔포스M', sub: '제산제' },
     '인사돌':        { color: '#8B5E3C', short: '인사돌', sub: '잇몸약' },
     '센트룸':        { color: '#E63946', short: '센트룸', sub: 'Women' },
@@ -4697,6 +5284,11 @@
     '아론':          { color: '#7209B7', short: '아론정', sub: '수면보조' },
     '슬리펠':        { color: '#9D4EDD', short: '슬리펠', sub: '수면유도' },
     '레돌민':        { color: '#3A86FF', short: '레돌민', sub: '천연수면' },
+    '케토톱':        { img: './assets/meds/ketotop.png', color: '#0066CC', short: '케토톱', sub: '플라스타' },
+    '콜대원':        { img: './assets/meds/coldex.png', color: '#1E5F99', short: '콜대원', sub: '시럽' },
+    '뉴베인':        { img: './assets/meds/newbein.png', color: '#FF6B7A', short: '뉴베인', sub: '액 10P' },
+    '스트렙실':      { img: './assets/meds/strepsils.png', color: '#C8102E', short: '스트렙실', sub: '트로키' },
+    '개비스콘':      { img: './assets/meds/gaviscon.png', color: '#00BFA5', short: '개비스콘', sub: '현탁액' },
   };
   function getBrand(name) {
     for (const key of Object.keys(MED_BRAND)) {
@@ -4705,32 +5297,32 @@
     return { color: '#6C757D', short: name.split(' ')[0], sub: '' };
   }
 
-  // 카테고리 추론 (Figma 카테고리 매핑)
+  // 카테고리 추론 (Figma 카테고리 매핑) — 실제 카테고리 아이콘 사용
   const CAT_INFO = {
-    '진통제':       { ico: '💊', name: '해열/소염/진통' },
-    '진통':         { ico: '💊', name: '해열/소염/진통' },
-    '해열':         { ico: '💊', name: '해열/소염/진통' },
-    '두통':         { ico: '💊', name: '해열/소염/진통' },
-    '근육통':       { ico: '💪', name: '근육/체계질환' },
-    '감기약':       { ico: '🤧', name: '비염/알레르기/이명' },
-    '감기':         { ico: '🤧', name: '비염/알레르기/이명' },
-    '콧물':         { ico: '🤧', name: '비염/알레르기/이명' },
-    '알레르기':     { ico: '🌸', name: '비염/알레르기/이명' },
-    '위장':         { ico: '🫃', name: '위장관 질환' },
-    '소화':         { ico: '🌿', name: '위장관 질환' },
-    '소화효소':     { ico: '🌿', name: '소화효소제' },
-    '속쓰림':       { ico: '🫃', name: '위장관 질환' },
-    '수면':         { ico: '😴', name: '수면/스트레스' },
-    '불면':         { ico: '😴', name: '수면/스트레스' },
-    '임부':         { ico: '🤰', name: '여성건강' },
-    '소아':         { ico: '👶', name: '소아과' },
-    '비타민':       { ico: '🍊', name: '비타민/영양공급' },
+    '진통제':       { img: './assets/cat-icons/fever-pain.png',        name: '해열/소염/진통' },
+    '진통':         { img: './assets/cat-icons/fever-pain.png',        name: '해열/소염/진통' },
+    '해열':         { img: './assets/cat-icons/fever-pain.png',        name: '해열/소염/진통' },
+    '두통':         { img: './assets/cat-icons/fever-pain.png',        name: '해열/소염/진통' },
+    '근육통':       { img: './assets/cat-icons/musculoskeletal.png',   name: '근골격계질환' },
+    '감기약':       { img: './assets/cat-icons/rhinitis.png',          name: '비염/알레르기/이명' },
+    '감기':         { img: './assets/cat-icons/rhinitis.png',          name: '비염/알레르기/이명' },
+    '콧물':         { img: './assets/cat-icons/rhinitis.png',          name: '비염/알레르기/이명' },
+    '알레르기':     { img: './assets/cat-icons/rhinitis.png',          name: '비염/알레르기/이명' },
+    '위장':         { img: './assets/cat-icons/gastric.png',           name: '위장관질환' },
+    '소화':         { img: './assets/cat-icons/gastric.png',           name: '위장관질환' },
+    '소화효소':     { img: './assets/cat-icons/gastric.png',           name: '위장관질환' },
+    '속쓰림':       { img: './assets/cat-icons/gastric.png',           name: '위장관질환' },
+    '수면':         { img: './assets/cat-icons/sleep-stress.png',      name: '수면/스트레스' },
+    '불면':         { img: './assets/cat-icons/sleep-stress.png',      name: '수면/스트레스' },
+    '임부':         { img: './assets/cat-icons/women-health.png',      name: '여성건강' },
+    '소아':         { img: './assets/cat-icons/pediatrics.png',        name: '소아과' },
+    '비타민':       { img: './assets/cat-icons/vitamin-nutrition.png', name: '비타민/영양공급' },
   };
   function pickCatInfo(detail = '') {
     for (const key of Object.keys(CAT_INFO)) {
       if (detail.includes(key)) return CAT_INFO[key];
     }
-    return { ico: '💊', name: '일반의약품' };
+    return { img: './assets/cat-icons/fever-pain.png', name: '일반의약품' };
   }
 
   function otcCard(m, idx) {
@@ -4748,10 +5340,12 @@
     const brand = getBrand(m.name);
     const thumbBg = brand.color;
     const thumbTextColor = brand.textColor || '#fff';
-    const thumbHTML = `<div class="thumb-fallback" style="background:${thumbBg};color:${thumbTextColor};">
-      <div>${brand.short}</div>
-      ${brand.sub ? `<div class="sub">${brand.sub}</div>` : ''}
-    </div>`;
+    const thumbHTML = brand.img
+      ? `<img src="${brand.img}" alt="${m.name}" style="width:100%;height:100%;object-fit:contain;background:#fff;"/>`
+      : `<div class="thumb-fallback" style="background:${thumbBg};color:${thumbTextColor};">
+          <div>${brand.short}</div>
+          ${brand.sub ? `<div class="sub">${brand.sub}</div>` : ''}
+        </div>`;
     return `
       <div class="ans-card" onclick="openMedDetail('${dataAttr}')">
         <button type="button" class="ans-card-save" aria-label="저장" onclick="event.stopPropagation();this.classList.toggle('saved');">
@@ -4773,10 +5367,10 @@
             <span class="star">★ ${m.rating}</span> · ${m.reviews.toLocaleString()}건
           </div>
           ${popularLine}
-          <div class="ans-card-cat-foot">
-            <span class="cat-ico">${catInfo.ico}</span>
+          <button type="button" class="ans-card-cat-foot" onclick="event.stopPropagation();showCatList('${catInfo.name}');">
+            <span class="cat-ico"><img src="${catInfo.img}" alt="${catInfo.name}" style="width:100%;height:100%;object-fit:contain;"/></span>
             ${catInfo.name} <span class="rk-suffix">${catRank}위</span>
-          </div>
+          </button>
           <div class="ans-card-actions">
             <button type="button" class="ans-order-btn" onclick="event.stopPropagation();alert('${m.name} — 주문 페이지로 이동 (프로토타입)');">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
@@ -4790,7 +5384,19 @@
   }
 
   // Standard answer template
-  function otcAnswer(topic, intro, guides, meds, source) {
+  function otcAnswer(topic, intro, guides, meds, source, followups) {
+    const followupsHTML = followups && followups.length ? `
+      <div class="ans-followup-wrap">
+        <div class="ans-followup-label">💡 이런 질문도 찾아보세요</div>
+        <div class="ans-followup">
+          ${followups.map((f, i) => {
+            const isPrimary = i === 0;
+            const arrow = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+            return `<button class="follow-chip${isPrimary ? ' primary' : ''}" onclick="ask(${JSON.stringify(f).replace(/"/g, '&quot;')})">${f}${arrow}</button>`;
+          }).join('')}
+        </div>
+      </div>
+    ` : '';
     return `<div class="ans">
       <div class="ans-badge">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 3.5L3.5 10.5a3 3 0 0 0 0 4.2l5.8 5.8a3 3 0 0 0 4.2 0l7-7a3 3 0 0 0 0-4.2L14.7 3.5a3 3 0 0 0-4.2 0z"/></svg>
@@ -4803,6 +5409,7 @@
       <div class="ans-cards-wrap">
         ${meds.map((m, i) => otcCard(m, i)).join('')}
       </div>
+      ${followupsHTML}
       <div class="ans-source"><b>출처</b> · ${source}</div>
     </div>`;
   }
@@ -4844,7 +5451,6 @@
   function goBackFromMedDetail() {
     const v = _prevView || 'home';
     if (v === 'chat') {
-      // 챗에서 왔으면 마지막 질문·답변 다시 표시
       try {
         const lastQ = localStorage.getItem('otcLastQuestion');
         if (lastQ) { ask(lastQ); return; }
@@ -4852,8 +5458,8 @@
       showAiView();
     }
     else if (v === 'ai') showAiView();
+    else if (v === 'cat') showCatList(document.getElementById('catCrumbName')?.textContent || '해열/소염/진통');
     else if (v === 'faq') showFaqView();
-    else if (v === 'med') showHomeView();
     else showHomeView();
   }
   function showMedDetailView(skipHash) {
@@ -4864,6 +5470,185 @@
     if (!skipHash) history.pushState({ view: 'med' }, '', '#med');
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
+  // ─────────── Category List View ───────────
+  const CAT_LIST_DATA = [
+    { rank: 1, maker: 'kenvue', name: '타이레놀정 500mg 10정', spec: '500mg 10 정 (PTP)', discount: 0, price: 1900000,
+      cat: '해열/소염/진통 › 아세트아미노펜, 단일제', img: './assets/meds/tylenol.png',
+      reviews: 1206, pills: [['😀','가스제거/더부룩함 해소',11],['😌','속이 편해요',11]], more: 6,
+      text: '지명으로 많이 찾으시는 품목입니다! 포장도 전용 봉투 있어 좋아요.', source: 'selling' },
+    { rank: 2, maker: 'kenvue', name: '케토톱 플라스타 40매 (신형)', spec: '30정/1g당 40매', discount: 0, price: 10500,
+      cat: '근골격계 질환 › 관절 및 근육통, 국소 지료제', img: './assets/meds/ketotop.png',
+      reviews: 1206, pills: [['😀','가스제거/더부룩함 해소',11],['😌','속이 편해요',11]], more: 6,
+      text: '지명으로 많이 찾으시는 품목입니다! 포장도 전용 봉투 있어 좋아요. 부족한 판매되요.', source: 'selling' },
+    { rank: 3, maker: '일동제약', name: '덴큐 헬스페이스트', spec: '120g 1 EA', discount: 0, price: '3500~5,400원',
+      cat: '구강 질환 › 의약품 치약 › ALBENDAZOLE', img: null,
+      reviews: 0, empty: true, source: 'external' },
+    { rank: 4, maker: '대원제약', name: '콜대원 코프시럽', spec: '500mg 10 정 (PTP)', discount: 0, price: '2,200~2,500원',
+      cat: '해열/소염/진통 › 아세트아미노펜, 단일제', img: './assets/meds/coldex.png',
+      reviews: 1206, pills: [['😀','가스제거/더부룩함 해소',11],['😌','속이 편해요',11]], more: 6,
+      text: '지명으로 많이 찾으시는 품목입니다! 포장도 전용봉투있어요.', source: 'selling' },
+    { rank: 5, maker: '대원제약', name: '용표우황청심원현탁액(사향번방액)', spec: '500mg 10 정 (PTP)', discount: 0, price: '2,200~2,500원',
+      cat: '구강 질환 › 의약품 치약 › ALBENDAZOLE', img: null,
+      reviews: 1206, pills: [['😀','진정 효과 빠름',11],['😌','부착력 좋음',11]], more: 6,
+      text: '최근 들어 10~20대 고객들의 트라블 케어용으로 많이 찾으십니다. 특히 연접이나 중요한 약속 전날, 메이크업 위해 바로...', source: 'external' },
+    { rank: 6, maker: '대원제약', name: '뉴베인액 10P', spec: '120g 1 EA', discount: 0, price: '16,500원',
+      cat: '순환기계 질환 › 잘관 강하 및 혈류 개선', img: './assets/meds/newbein.png',
+      reviews: 0, empty: true, source: 'selling' },
+    { rank: 7, maker: '한독', name: '훼스탈 플러스정 10정', spec: '315밀리그램 10 정(PTP)', discount: 0, price: '2,800원',
+      cat: '위장관 질환 › 소화제', img: './assets/meds/hestal.png',
+      reviews: 1206, pills: [['😀','가스제거/더부룩함 해소',11],['😌','속이 편해요',11]], more: 6,
+      text: '지명으로 많이 찾으시는 품목입니다! 포장도 전용봉투있어좋아요.', source: 'selling' },
+    { rank: 8, maker: '대원제약', name: '스트렙실 허니&레몬 트로키 12정', spec: '500mg 10 정 (PTP)', discount: 7, price: 4000, origPrice: 4300,
+      cat: '해열/소염/진통 › 아세트아미노펜 복합제 (감기약)', img: './assets/meds/strepsils.png',
+      reviews: 1206, pills: [['😀','가스제거/더부룩함 해소',11],['😌','속이 편해요',11]], more: 6,
+      text: '지명으로 많이 찾으시는 품목입니다! 포장도 전용봉투있어좋아요.', source: 'selling' },
+    { rank: 9, maker: '대원제약', name: '인사덴트 닥터', spec: '500mg 10 정 (PTP)', discount: 0, price: '가격미확인',
+      cat: '구강 질환 › 의약품 치약 › ALBENDAZOLE', img: null,
+      reviews: 0, empty: true, source: 'selling' },
+    { rank: 10, maker: '대원제약', name: '개비스콘 더블액션 현탁액 10ml*12포', spec: '500mg 10 정 (PTP)', discount: 0, price: 12500,
+      cat: '위장관 질환 › 제산제', img: './assets/meds/gaviscon.png',
+      reviews: 1206, pills: [['😀','가스제거/더부룩함 해소',11],['😌','속이 편해요',11]], more: 6,
+      text: '지명으로 많이 찾으시는 품목입니다! 포장도 전용봉투있어좋아요.', source: 'selling' },
+  ];
+
+  const CATEGORIES = [
+    { img: './assets/cat-icons/liver-biliary.png',     name: '간/담도질환' },
+    { img: './assets/cat-icons/gastric.png',           name: '위장관질환' },
+    { img: './assets/cat-icons/oral.png',              name: '구강질환' },
+    { img: './assets/cat-icons/rhinitis.png',          name: '비염/알레르기/이명' },
+    { img: './assets/cat-icons/musculoskeletal.png',   name: '근골격계질환' },
+    { img: './assets/cat-icons/fever-pain.png',        name: '해열/소염/진통' },
+    { img: './assets/cat-icons/expectorant.png',       name: '진해거담' },
+    { img: './assets/cat-icons/neuro-mental.png',      name: '신경/정신계질환' },
+    { img: './assets/cat-icons/eye.png',               name: '안과질환' },
+    { img: './assets/cat-icons/skin-itch.png',         name: '피부염/가려움' },
+    { img: './assets/cat-icons/skin-damage.png',       name: '피부손상/재생' },
+    { img: './assets/cat-icons/topical-infection.png', name: '외용감염치료' },
+    { img: './assets/cat-icons/hair.png',              name: '탈모/두피' },
+    { img: './assets/cat-icons/skin-beauty.png',       name: '피부미용' },
+    { img: './assets/cat-icons/women-health.png',      name: '여성건강' },
+    { img: './assets/cat-icons/men-health.png',        name: '남성건강' },
+    { img: './assets/cat-icons/urology-contra.png',    name: '기타비뇨기/피임' },
+    { img: './assets/cat-icons/circulation.png',       name: '순환기계질환' },
+    { img: './assets/cat-icons/vitamin-nutrition.png', name: '비타민/영양공급' },
+    { img: './assets/cat-icons/metabolic.png',         name: '대사성 질환/기타' },
+    { img: './assets/cat-icons/sleep-stress.png',      name: '수면/스트레스' },
+    { img: './assets/cat-icons/urology-women.png',     name: '비뇨/여성' },
+    { img: './assets/cat-icons/energy.png',            name: '에너지대사' },
+    { img: './assets/cat-icons/blood-vessel.png',      name: '혈액/혈관' },
+  ];
+
+  function renderCatIcons(activeName = '해열/소염/진통') {
+    const wrap = document.getElementById('catIcons');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    CATEGORIES.forEach(c => {
+      const item = document.createElement('button');
+      item.className = 'cat-icon-item' + (c.name === activeName ? ' active' : '');
+      item.innerHTML = `<div class="cat-icon-circle"><img src="${c.img}" alt="${c.name}"/></div><div class="cat-icon-label">${c.name}</div>`;
+      item.onclick = () => showCatList(c.name);
+      wrap.appendChild(item);
+    });
+  }
+  function renderCatProducts() {
+    const wrap = document.getElementById('catProducts');
+    if (!wrap) return;
+    wrap.innerHTML = CAT_LIST_DATA.map(p => catProductCard(p)).join('');
+  }
+  function catProductCard(p) {
+    const fmt = n => typeof n === 'number' ? n.toLocaleString() + '원' : n;
+    const priceHTML = p.discount > 0
+      ? `<span class="cat-pi-discount">${p.discount}%</span><span class="cat-pi-num">${fmt(p.price)}</span>${p.origPrice ? `<span class="cat-pi-orig">${fmt(p.origPrice)}</span>` : ''}`
+      : (p.discount === 0 && typeof p.price === 'number'
+          ? `<span class="cat-pi-discount">0%</span><span class="cat-pi-num">${fmt(p.price)}</span><span class="cat-pi-orig">0원</span>`
+          : `<span class="cat-pi-num">${p.price || '가격미확인'}</span>`);
+    const thumbWrapClass = p.img ? 'cat-product-thumb' : 'cat-product-thumb cat-product-thumb-empty';
+    const thumbHTML = p.img
+      ? `<img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:contain;"/>`
+      : '';
+    const catParts = p.cat.split('›').map(s => `<span>${s.trim()}</span>`).join('<span class="sep">›</span>');
+    let reviewHTML;
+    if (p.empty) {
+      reviewHTML = `
+        <div class="cat-pr-empty">
+          <span class="cat-pr-x2-badge">×2</span>
+          <div class="cat-pr-empty-text">아직 등록된 ${p.source === 'external' ? '외부몰리뷰' : '셀링리뷰'}가 없어요.<br/>첫리뷰 작성하고 <span class="point">포인트 x2배</span> 받으세요!</div>
+          <button class="cat-pr-write-btn">리뷰 작성하기</button>
+        </div>`;
+    } else {
+      const labelClass = p.source === 'external' ? 'external' : 'selling';
+      const labelIco = p.source === 'external' ? '🔵' : '⭐';
+      const labelText = p.source === 'external' ? '외부몰리뷰' : '셀링리뷰';
+      const pills = (p.pills || []).map(p => `<span class="cat-pr-pill">${p[0]} ${p[1]} ${p[2]}%</span>`).join('');
+      const moreCount = p.more ? `<span class="cat-pr-pill">+${p.more}</span>` : '';
+      reviewHTML = `
+        <div class="cat-pr-label ${labelClass}">${labelIco} ${labelText}</div>
+        <div class="cat-pr-headline"><span style="color:var(--primary);font-weight:800;">${p.reviews.toLocaleString()}명</span>의 약사님들이 이런점을 좋아하셨어요!</div>
+        <div class="cat-pr-pills">${pills}${moreCount}</div>
+        <div class="cat-pr-text">${p.text}<div class="cat-pr-mini-thumb">💊</div></div>`;
+    }
+    return `
+      <div class="cat-product" onclick="openMedDetail('${encodeURIComponent(JSON.stringify({name: p.name, fullName: p.name + ' (' + p.maker + ')', maker: p.maker, price: typeof p.price === 'number' ? p.price : 3200}))}')" style="cursor:pointer;">
+        <div class="cat-product-rank">${p.rank}</div>
+        <div class="cat-product-info">
+          <div class="cat-pi-maker">${p.maker}</div>
+          <div class="cat-pi-name">
+            ${p.name}
+            <span class="spec">${p.spec || ''}</span>
+            <span class="utong">유통</span>
+          </div>
+          <div class="cat-pi-price">${priceHTML}</div>
+          <div class="cat-pi-cat">${catParts}</div>
+          <button class="cat-pi-order" onclick="event.stopPropagation();alert('${p.name} — 주문 (프로토타입)');">
+            <span class="b-mark">B</span>
+            주문하기
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="${thumbWrapClass}">${thumbHTML}</div>
+        <div class="cat-product-review">${reviewHTML}</div>
+      </div>`;
+  }
+
+  let _catPrevView = 'home';
+  function showCatList(catName) {
+    _catPrevView = getCurrentView();
+    const crumbName = document.getElementById('catCrumbName');
+    if (crumbName) crumbName.textContent = catName || '해열/소염/진통';
+    renderCatIcons(catName || '해열/소염/진통');
+    renderCatProducts();
+    showCatListView();
+  }
+  function goBackFromCatList() {
+    const v = _catPrevView || 'home';
+    if (v === 'chat') {
+      try {
+        const lastQ = localStorage.getItem('otcLastQuestion');
+        if (lastQ) { ask(lastQ); return; }
+      } catch (e) {}
+      showAiView();
+    }
+    else if (v === 'ai') showAiView();
+    else if (v === 'med') {
+      try {
+        const lastMed = localStorage.getItem('otcLastMed');
+        if (lastMed) { openMedDetail(lastMed); return; }
+      } catch (e) {}
+      showHomeView();
+    }
+    else if (v === 'faq') showFaqView();
+    else showHomeView();
+  }
+
+  function showCatListView(skipHash) {
+    showAllViewsHidden();
+    catListView.hidden = false;
+    document.body.removeAttribute('data-view');
+    document.body.classList.remove('header-hidden');
+    if (!skipHash) history.pushState({ view: 'cat' }, '', '#cat');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
   // 종류 chip toggle
   function mdSelectChip(el) {
     el.parentElement.querySelectorAll('.md-chip').forEach(c => c.classList.remove('active'));
@@ -4960,17 +5745,79 @@
     else if (e.key === 'ArrowLeft') reviewPrev();
   });
 
-  function mdSwitchTab(btnEl, tab) {
+  // Scroll-to-section tab navigation
+  function mdScrollToTab(tab, btnEl) {
+    const id = tab === 'review' ? 'mdTabReview' : tab === 'info' ? 'mdTabInfo' : 'mdTabDetail';
+    const target = document.getElementById(id);
+    if (!target) return;
     btnEl.parentElement.querySelectorAll('.md-tab').forEach(b => b.classList.remove('active'));
     btnEl.classList.add('active');
-    ['mdTabDetail', 'mdTabInfo', 'mdTabReview'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.hidden = true;
-    });
-    const targetId = tab === 'review' ? 'mdTabReview' : tab === 'info' ? 'mdTabInfo' : 'mdTabDetail';
-    const target = document.getElementById(targetId);
-    if (target) target.hidden = false;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
+  // Scroll spy: 스크롤 위치에 따라 active 탭 자동 업데이트
+  (function setupMdScrollSpy() {
+    if (!('IntersectionObserver' in window)) return;
+    const tabsToSections = { 'detail': 'mdTabDetail', 'info': 'mdTabInfo', 'review': 'mdTabReview' };
+    const sectionToTab = { 'mdTabDetail': 'detail', 'mdTabInfo': 'info', 'mdTabReview': 'review' };
+    const observer = new IntersectionObserver((entries) => {
+      // 가장 상단 가까이 있는 가시 섹션 찾기
+      let topMost = null;
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          if (!topMost || e.boundingClientRect.top < topMost.boundingClientRect.top) {
+            topMost = e;
+          }
+        }
+      });
+      if (!topMost) return;
+      const tab = sectionToTab[topMost.target.id];
+      if (!tab) return;
+      document.querySelectorAll('.md-tab').forEach(b => {
+        b.classList.toggle('active', b.textContent.trim().startsWith(
+          tab === 'detail' ? '제품상세' : tab === 'info' ? '의약품' : '셀링리뷰'
+        ));
+      });
+    }, { rootMargin: '-80px 0px -60% 0px', threshold: 0 });
+    // 페이지 로드 후 섹션 관찰 시작
+    document.addEventListener('DOMContentLoaded', () => {
+      Object.values(tabsToSections).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    });
+    // 이미 로드된 경우 즉시 관찰
+    if (document.readyState !== 'loading') {
+      Object.values(tabsToSections).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    }
+  })();
+
+  // GNB 자동 hide on scroll down, show on scroll up (상세 페이지만)
+  (function setupGnbAutoHide() {
+    let lastY = 0;
+    let ticking = false;
+    function tick() {
+      const cur = window.scrollY;
+      const isMed = !medDetailView.hidden;
+      if (!isMed) {
+        document.body.classList.remove('header-hidden');
+        lastY = cur; ticking = false; return;
+      }
+      if (cur > lastY && cur > 120) {
+        document.body.classList.add('header-hidden');
+      } else if (cur < lastY - 4) {
+        document.body.classList.remove('header-hidden');
+      }
+      lastY = cur;
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(tick); ticking = true; }
+    }, { passive: true });
+  })();
 
   // Mock responses
   function mockReply(q) {
@@ -5380,7 +6227,16 @@
   // ─────────── Browser back/forward 지원 ───────────
   window.addEventListener('popstate', (e) => {
     const hash = (window.location.hash || '').replace('#', '');
-    if (hash === 'med') showMedDetailView(true);
+    if (hash === 'med') {
+      try {
+        const lastMed = localStorage.getItem('otcLastMed');
+        if (lastMed) { openMedDetail(lastMed); return; }
+      } catch (err) {}
+      showHomeView(true);
+    }
+    else if (hash === 'cat') {
+      showCatList('해열/소염/진통');
+    }
     else if (hash === 'chat') {
       try {
         const lastQ = localStorage.getItem('otcLastQuestion');
@@ -5397,6 +6253,10 @@
   (function routeOnLoad() {
     const hash = (window.location.hash || '').replace('#', '');
     if (hash === 'faq') showFaqView(true);
+    else if (hash === 'cat') {
+      showCatList('해열/소염/진통');
+      return;
+    }
     else if (hash === 'med') {
       // 상세 페이지: 마지막 med 데이터 복원
       try {
